@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
+import { Login } from "../ui/authentication/login";
 
 interface ProtectedRouteProps{
     children?: ReactNode,
@@ -17,11 +18,12 @@ export const ProptectedRoute = (props: ProtectedRouteProps)=>{
         if(isAuthenticated) navigate('/dashboard');
         else return props.children;
     }else{
-        if(!isAuthenticated) navigate('/');
+        // if(!isAuthenticated) navigate('/');
     }
 
     return (<>
-        { isAuthenticated && props.children }    
-        { !isAuthenticated && <div className="flex items-center justify-center h-screen"></div>}
+        {props.children }    
+        {/* { isAuthenticated && props.children }    
+        { !isAuthenticated && <Login/>} */}
     </>);
 }
