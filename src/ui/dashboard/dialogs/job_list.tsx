@@ -14,15 +14,6 @@ export function JobList(props: JobListProps) {
     onClose: props.onClose,
   });
 
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-
-  const selectedValue = React.useMemo(
-    () => (Array.from(selectedKeys).join(", ") as String).replaceAll("_", " "),
-    [selectedKeys]
-  );
-
-
-
   return (
     <>
       {/* <Button onPress={onOpen} color="primary">Open Modal</Button> */}

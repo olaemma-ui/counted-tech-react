@@ -10,6 +10,8 @@ import appLogo from './assets/COUNTED Logo 1.svg';
 import { SetPassword } from "./ui/authentication/set_password";
 import { Dashboard } from "./ui/dashboard/dashboard";
 import { MaterialsPage } from "./ui/material/material";
+import { EmployeeDetails } from "./ui/employee/view_employee";
+import { Chat } from "./ui/chat/chat";
 
 function App() {
 
@@ -49,6 +51,18 @@ function App() {
               <Route path={"materials"} element={
                 <ProptectedRoute>
                   <MaterialsPage/>
+                </ProptectedRoute>
+              } />
+             
+              <Route path={"employee"} element={
+                <ProptectedRoute>
+                  <EmployeeDetails/>
+                </ProptectedRoute>
+              } />
+             
+              <Route path={"chat"} element={
+                <ProptectedRoute>
+                  <Chat/>
                 </ProptectedRoute>
               } />
             </Route>

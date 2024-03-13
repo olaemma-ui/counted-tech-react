@@ -13,7 +13,7 @@ export const AuthenticationLayout = (props : AuthenticationLayoutProps)=>{
 
     return (<>
       <div className="auth-body">
-            <div className="max-w-[80em] bg-[#F4F4F4] rounded-[30px] sm:p-12 p-8 mx-auto">
+            <div className="max-w-[80em] bg-[#F4F4F4] overflow-y-auto max-h-[80vh] rounded-[30px] sm:p-12 p-8 mx-auto">
                 {props.title && <h1 className="text-black text-4xl font-semibold mb-5"> {props.title} </h1>}
                 <img src={appLogo} className="max-h-[10em] max-w-[10em]"  />
                 {props.children}

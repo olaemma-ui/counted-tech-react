@@ -25,6 +25,12 @@ export const Dashboard = ()=> {
         navigate('/dashboard/materials');
     }
 
+    function handleMessagePress() {
+        console.log('called');
+        
+        navigate('/dashboard/chat');
+    }
+
     const menu = [
         {
             icon: <MapIcon width="20" height="20"/>,
@@ -39,7 +45,7 @@ export const Dashboard = ()=> {
         },
         {
             icon: <MessageIcon width="20" height="20"/>,
-            onclick: ()=>{}
+            onclick: ()=>{handleMessagePress()}
         },
         {
             icon: <SettingsIcon width="20" height="20"/>,
@@ -75,7 +81,7 @@ export const Dashboard = ()=> {
                         </NavbarItem>
 
                         <NavbarItem>
-                            <Button isIconOnly className="bg-[#4269E1] rounded-md">
+                            <Button isIconOnly onPress={handleMessagePress} className="bg-[#4269E1] rounded-md">
                                 <MessageIcon width="20" height="20"/>
                             </Button>
                         </NavbarItem>

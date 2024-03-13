@@ -33,7 +33,7 @@ export function EditProfile(props: EditProfileProps) {
         placement="top-center"
         backdrop="blur"
         isDismissable={false}
-        size="2xl"
+        // size="2xl"
         scrollBehavior="inside"
 
       >
@@ -45,25 +45,52 @@ export function EditProfile(props: EditProfileProps) {
               </ModalHeader>
               <ModalBody>
                   <Input
-                    label="Location"
+                    label="Vorname"
                     variant="flat"
                     type="text"
-                    className="shadow-md rounded-xl"
+                    className="shadow-md rounded-xl mb-3"
                   />
 
-                <div className="sm:flex gap-4">
                   <Input
-                    label="Radius"
+                    label="Nachname"
+                    variant="flat"
+                    type="text"
+                    className="shadow-md rounded-xl mb-3"
+                    // endContent={}
+                  />
+                  
+                  <Input
+                    label="Telefonnumer"
+                    variant="flat"
+                    type="text"
+                    className="shadow-md rounded-xl mb-3"
+                  />
+
+                  <Input
+                    label="Personalnummer"
                     variant="flat"
                     type="number"
                     className="shadow-md rounded-xl mb-3"
                     // endContent={}
                   />
-                    <Dropdown showArrow>
+
+
+                  <p className=" text-black">Führerschein </p>
+                  <div className="flex gap-8">
+                    <div className="w-full shadow-md rounded-xl cursor-pointer text-black flex items-center justify-center  bg-white h-[3em] border border-[#2E4BA4]">
+                      Ja
+                    </div>
+                    <div className="w-full bg-white h-[3em] cursor-pointer shadow-md text-black flex items-center justify-center rounded-xl border">
+                      Nein
+                    </div>
+                  </div>
+
+                  <p className=" text-black mt-3">Bauvorrhaben </p>
+                  <Dropdown showArrow>
                       <DropdownTrigger>
 
                         <div className={`p-4 flex items-center gap-2 justify-between rounded-xl h-[4em] ${selectedValue? 'text-black': 'text-gray-500 text-sm font-normal'} shadow-md w-full text-left `}>
-                          {selectedValue ? selectedValue : 'Art der Arbeit'}
+                          {selectedValue ? selectedValue : 'Bauvorrhaben'}
                           <ArrowDownIcon width="20" height="20" className="self-end justify-self-end" />
                         </div>
                       </DropdownTrigger>
@@ -82,108 +109,12 @@ export function EditProfile(props: EditProfileProps) {
                         <DropdownItem key="iteration" className="text-black">Iteration</DropdownItem>
                       </DropdownMenu>
                     </Dropdown>
-
-                </div>
-
-                <Divider className="my-2 h-[0.12em] bg-[#4269E1]"/>
-
-                <p className="text-black"> Datum </p>
-                <Input
-                      label="Startdatum"
-                      variant="flat"
-                      type="date"
-                      className="shadow-md rounded-xl mb-3"
-                      // endContent={}
-                    />
-                  <Input
-                      label="Enddatum"
-                      variant="flat"
-                      type="date"
-                      className="shadow-md rounded-xl mb-3"
-                      // endContent={}
-                    />
-                  <Input
-                      label="Erinnerung"
-                      variant="flat"
-                      type="date"
-                      className="shadow-md rounded-xl mb-3"
-                      // endContent={}
-                    />
-              
-                <Divider className="my-2 h-[0.12em] bg-[#4269E1]"/>
-                
-                <div className="flex gap-4 justify-evenly">
-                  <p className="text-black"> Startzeit </p>
-                  <p className="text-black"> Endzeit </p>
-                  <p className="text-black"> Wochentag </p>
-                </div>
-
-                <div className="flex gap-4 items-center">
-                  <Input
-                      label="Startdatum"
-                      variant="flat"
-                      type="time"
-                      className="shadow-md rounded-xl mb-3"
-                      size="sm"
-                    />
-                  <Input
-                      label="Enddatum"
-                      variant="flat"
-                      type="time"
-                      size="sm"
-                      className="shadow-md rounded-xl mb-3"
-                    />
-                  <Input
-                      label="Erinnerung"
-                      variant="flat"
-                      type="time"
-                      size="sm"
-                      className="shadow-md rounded-xl mb-3"
-                    />
-                    <Checkbox defaultSelected size="lg"/>
-
-                </div>
-
-                <Button size="sm" isIconOnly className="text-3xl pb-1 text-white bg-[#4269E1]">
-                  +
-                </Button>
-                <Divider className="my-2 h-[0.12em] bg-[#4269E1]"/>
-                
-                <div className="flex gap-16 justify-between max-w-[18em]">
-                  <p className="text-black"> Pausenstart </p>
-                  <p className="text-black"> Pausenende </p>
-                </div>
-
-                <div className="flex gap-4 items-center">
-                  <Input
-                      label="Startdatum"
-                      variant="flat"
-                      type="time"
-                      className="shadow-md rounded-xl mb-3"
-                      size="sm"
-                    />
-                  <Input
-                      label="Enddatum"
-                      variant="flat"
-                      type="time"
-                      size="sm"
-                      className="shadow-md rounded-xl mb-3"
-                    />
-                  <Input
-                      label="Erinnerung"
-                      variant="flat"
-                      type="text"
-                      size="sm"
-                      className="shadow-md rounded-xl mb-3"
-                    />
-                    {/* <Checkbox defaultSelected size="lg"/> */}
-
-                </div>
+                  
               
               </ModalBody>
               <ModalFooter>
-                <Button color="primary" className="w-full bg-[#4269E1]" onPress={onClose}>
-                  speichern
+                <Button color="primary" className="w-full h-[4em] bg-[#4269E1]" onPress={onClose}>
+                  bearbeiten
                 </Button>
               </ModalFooter>
             </>
