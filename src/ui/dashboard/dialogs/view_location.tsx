@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Checkbox, Input, Link, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Divider, Avatar} from "@nextui-org/react";
 import { ArrowDownIcon, PencilIcon } from "../../../_components/svg_components";
 import { EditLocation } from "./edit_location";
+import { LocationData } from "../../../interface/response/dashboard_data";
 
 
 interface ViewLocationProps{
     onClose?: () => void,
     isOpen: boolean,
+    locationData: LocationData,
+    jobTitle: string
 }
 
 export function ViewLocation(props: ViewLocationProps) {
@@ -58,40 +61,29 @@ export function ViewLocation(props: ViewLocationProps) {
                     variant="flat"
                     type="text"
                     className="shadow-md rounded-xl"
+                    readOnly
+                    value={`${props.locationData.address}`}
                   />
 
                 <div className="sm:flex gap-4">
                   <Input
-                    label="Radius"
+                    label="Radius ( meter )"
                     variant="flat"
                     type="number"
+                    readOnly
+                    value={`${props.locationData.radius}`}
                     className="shadow-md rounded-xl mb-3"
                     // endContent={}
                   />
-                    <Dropdown showArrow>
-                      <DropdownTrigger>
-
-                        <div className={`p-4 flex items-center gap-2 justify-between rounded-xl h-[4em] ${selectedValue? 'text-black': 'text-gray-500 text-sm font-normal'} shadow-md w-full text-left `}>
-                          {selectedValue ? selectedValue : 'Art der Arbeit'}
-                          <ArrowDownIcon width="20" height="20" className="self-end justify-self-end" />
-                        </div>
-                      </DropdownTrigger>
-                      <DropdownMenu 
-                        aria-label="Single selection example"
-                        variant="flat"
-                        disallowEmptySelection
-                        selectionMode="single"
-                        selectedKeys={selectedKeys}
-                        onSelectionChange={setSelectedKeys}
-                      >
-                        <DropdownItem key="text" className="text-black">Text</DropdownItem>
-                        <DropdownItem key="number" className="text-black">Number</DropdownItem>
-                        <DropdownItem key="date" className="text-black">Date</DropdownItem>
-                        <DropdownItem key="single_date" className="text-black">Single Date</DropdownItem>
-                        <DropdownItem key="iteration" className="text-black">Iteration</DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown>
-
+                  <Input
+                    label="Art der Arbeit"
+                    variant="flat"
+                    type="text"
+                    readOnly
+                    value={`${props.jobTitle}`}
+                    className="shadow-md rounded-xl mb-3"
+                    endContent={<ArrowDownIcon width="20" height="20" className="self-end justify-self-end" />}
+                  />
                 </div>
 
                 <Divider className="my-2 h-[0.12em] bg-[#4269E1]"/>
@@ -101,24 +93,25 @@ export function ViewLocation(props: ViewLocationProps) {
                   <Input
                       label="Einheit [Menge]"
                       variant="flat"
-                      type="date"
+                      type="number"
                       readOnly
+                      value={`${props.locationData.calculator?.quantity ?? 0}`}
                       className="shadow-md rounded-xl mb-3"
                       // endContent={}
                     />
                   <Input
                       label="Preis pro"
                       variant="flat"
-                      type="date"
                       readOnly
+                      value={`${props.locationData.calculator?.price ?? 0}`}
                       className="shadow-md rounded-xl mb-3"
                       // endContent={}
                     />
                   <Input
                       label="€ pro Stunde"
                       variant="flat"
-                      type="date"
                       readOnly
+                      value={`${props.locationData.calculator?.hours ?? 0}`}
                       className="shadow-md rounded-xl mb-3"
                       // endContent={}
                     />
@@ -133,13 +126,16 @@ export function ViewLocation(props: ViewLocationProps) {
                       variant="flat"
                       type="date"
                       className="shadow-md rounded-xl mb-3"
-                      // endContent={}
-                    />
+                      isReadOnly
+                      value={`${props.locationData.start_date}`}
+                      />
                   <Input
                       label="Enddatum"
                       variant="flat"
                       type="date"
                       className="shadow-md rounded-xl mb-3"
+                      isReadOnly
+                      value={`${props.locationData.end_date}`}
                       // endContent={}
                     />
                   <Input
@@ -147,6 +143,8 @@ export function ViewLocation(props: ViewLocationProps) {
                       variant="flat"
                       type="date"
                       className="shadow-md rounded-xl mb-3"
+                      isReadOnly
+                      value={`${props.locationData.memory}`}
                       // endContent={}
                     />
                 </div>
@@ -154,76 +152,90 @@ export function ViewLocation(props: ViewLocationProps) {
                 <Divider className="my-2 h-[0.12em] bg-[#4269E1]"/>
                 
                 <div className="flex gap-4 justify-evenly">
-                  <p className="text-black"> Startzeit </p>
-                  <p className="text-black"> Endzeit </p>
-                  <p className="text-black"> Wochentag </p>
+                  <p className="text-black w-full text-start"> Startzeit </p>
+                  <p className="text-black w-full text-start"> Endzeit </p>
+                  <p className="text-black w-full text-start"> Wochentag </p>
                 </div>
-
-                <div className="flex gap-4 items-center">
-                  <Input
-                      label="Startdatum"
-                      variant="flat"
-                      type="time"
-                      className="shadow-md rounded-xl mb-3"
-                      size="sm"
-                    />
-                  <Input
-                      label="Enddatum"
-                      variant="flat"
-                      type="time"
-                      size="sm"
-                      className="shadow-md rounded-xl mb-3"
-                    />
-                  <Input
-                      label="Erinnerung"
-                      variant="flat"
-                      type="time"
-                      size="sm"
-                      className="shadow-md rounded-xl mb-3"
-                    />
-                    {/* <Checkbox defaultSelected size="lg"/> */}
-
-                </div>
-
+                {
+                  props.locationData.timetable?.map((element) => 
+                  <div className="flex gap-4 items-center">
+                    <Input
+                        label="Startdatum"
+                        variant="flat"
+                        isReadOnly
+                        type="time"
+                        value={element.start_time}
+                        className="shadow-md rounded-xl mb-3"
+                        size="sm"
+                        />
+                    <Input
+                        label="Enddatum"
+                        variant="flat"
+                        type="time"
+                        value={element.end_time}
+                        isReadOnly
+                        size="sm"
+                        className="shadow-md rounded-xl mb-3"
+                        />
+                    <Input
+                        variant="flat"
+                        isReadOnly
+                        type="text"
+                        value={element.days}
+                        size="lg"
+                        className="shadow-md rounded-xl mb-3"
+                      />
+  
+                  </div>)
+                }
+              
                 <Divider className="my-2 h-[0.12em] bg-[#4269E1]"/>
                 
-                <div className="flex gap-16 justify-between max-w-[18em]">
-                  <p className="text-black"> Pausenstart </p>
-                  <p className="text-black"> Pausenende </p>
+                <div className="flex gap-8 justify-between">
+                  <p className="text-black w-full text-start"> Pausenstart </p>
+                  <p className="text-black w-full text-start"> Pausenende </p>
+                  <p className="text-black w-full text-start"> Wochentag </p>
                 </div>
 
-                <div className="flex gap-4 items-center">
-                  <Input
-                      label="Startdatum"
-                      variant="flat"
-                      type="time"
-                      className="shadow-md rounded-xl mb-3"
-                      size="sm"
-                    />
-                  <Input
-                      label="Enddatum"
-                      variant="flat"
-                      type="time"
-                      size="sm"
-                      className="shadow-md rounded-xl mb-3"
-                    />
-                  <Input
-                      label="Erinnerung"
-                      variant="flat"
-                      type="text"
-                      size="sm"
-                      className="shadow-md rounded-xl mb-3"
-                    />
-                    {/* <Checkbox defaultSelected size="lg"/> */}
-
-                </div>
+                {
+                  props.locationData.breaks?.map((element) => 
+                  <div className="flex gap-4 items-center">
+                    <Input
+                        label="Pausenstart"
+                        variant="flat"
+                        isReadOnly
+                        type="time"
+                        value={element.start_time}
+                        className="shadow-md rounded-xl mb-3"
+                        size="sm"
+                        />
+                    <Input
+                        label="Pausenende"
+                        variant="flat"
+                        type="time"
+                        value={element.end_time}
+                        isReadOnly
+                        size="sm"
+                        className="shadow-md rounded-xl mb-3"
+                        />
+                    <Input
+                        variant="flat"
+                        isReadOnly
+                        type="text"
+                        value={element.date}
+                        size="lg"
+                        className="shadow-md rounded-xl mb-3"
+                      />
+  
+                  </div>)
+                }
               
                 <Divider className="my-2 h-[0.12em] bg-[#4269E1]"/>
                 <div className="p-3 mt-3 rounded-lg text-black bg-white shadow-md">
-                    <p className="text-black"> Code: </p>50936
+                    <p className="text-black"> Code: {props.locationData.location_code}</p>
                 </div>
                 
-                <Divider className="my-2 h-[0.12em] bg-[#4269E1]"/>
+                {/* <Divider className="my-2 h-[0.12em] bg-[#4269E1]"/>
                 <div className="bg-white shadow-lg rounded-xl p-4 w-full">
                     <p className="text-black">
                         aktuelle Mitarbeiter
@@ -301,7 +313,7 @@ export function ViewLocation(props: ViewLocationProps) {
                         <p className="text-black font-bold text-xl">6</p>
                     </div>
                    </div>
-                </div>
+                </div> */}
               </ModalBody>
 
             </>

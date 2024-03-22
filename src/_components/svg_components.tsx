@@ -432,7 +432,7 @@ export function UploadImageIcon(props: SvgProps) {
   );
 }
 
-export function ArrowUpIcon() {
+export function ArrowUpIcon(props: SvgProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -440,12 +440,33 @@ export function ArrowUpIcon() {
       height="22"
       fill="none"
       viewBox="0 0 15 22"
+      {...props}
     >
       <path
         stroke="#fff"
         strokeLinecap="round"
         strokeWidth="2"
         d="M7.628 1.938l6.285 6.47m-6.285-6.47l-6.286 6.47m6.286-6.47V20.056"
+      ></path>
+    </svg>
+  );
+}
+
+export function CheckedSuccessSvg(props: SvgProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="150"
+      height="151"
+      fill="none"
+      viewBox="0 0 150 151"
+      {...props}
+    >
+      <path
+        stroke="#0EAD69"
+        strokeLinecap="round"
+        strokeWidth="5"
+        d="M75 131.398a56.25 56.25 0 10-39.775-16.475M100 62.648L70.152 98.466c-.656.787-.983 1.18-1.424 1.2-.44.02-.802-.342-1.527-1.066L50 81.398"
       ></path>
     </svg>
   );

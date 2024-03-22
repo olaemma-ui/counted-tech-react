@@ -2,6 +2,7 @@
 import React from "react";
 import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Chip, Button} from "@nextui-org/react";
 import { CalendarIcon, EyeIcon, SettingsIcon, SyncIcon, TodoListIcon } from "./svg_components";
+import { LocationData } from "../interface/response/dashboard_data";
 
 
 interface DahboardCardProps{
@@ -16,13 +17,13 @@ interface DahboardCardProps{
 
 export const DashboardCard = (props: DahboardCardProps)=> {
     return (<>
-        <div className="card p-4 rounded-md md:max-w-[16em] max-w-[10em] w-full bg-white text-black shadow-lg">
+        <div className="card p-4 rounded-xl md:max-w-[18em] max-w-[10em] w-full bg-white text-black shadow-lg">
             <h3 className="title">
                 {props.title}
             </h3>
             
             {props.value && 
-                <div className={`mt-3 p-2 w-full rounded-lg ${props.color ? props.color : ''}`}>
+                <div className={`mt-3 p-2 w-full rounded-lg text-white ${props.color ? props.color : ''}`}>
                     {props.value}
                 </div>
             }
@@ -30,7 +31,7 @@ export const DashboardCard = (props: DahboardCardProps)=> {
             {props.multiValue && 
               <div className="flex gap-4">
                   {props.multiValue.map((e, i) => 
-                    <div className={`mt-3 p-2 w-full rounded-lg ${props.multiColor ? props.multiColor[i] : ''}`}>
+                    <div className={`mt-3 p-2 w-full rounded-lg text-white ${props.multiColor ? props.multiColor[i] : ''}`}>
                         {props.multiValue ? props.multiValue[i] : ''}
                     </div>)}
               </div>
@@ -45,28 +46,34 @@ interface DashboardAdressCardProps{
     onEyeClick?: ()=> void,
     onCalendarClick?: ()=> void,
     onSyncClick?: ()=> void,
-    onPress?: ()=> void
+    onPress?: ()=> void,
+    locationData: LocationData,
+
 }
 export function DashboardAddressCard(props: DashboardAdressCardProps) {
+    const total =  (((props?.locationData?.calculator?.quantity ?? 0) / 
+    (props?.locationData?.calculator?.price ?? 0)) * 
+    (props?.locationData?.calculator?.hours ?? 0)) - 
+    (Number.parseInt(props.locationData.total_timer_count ?? '0') / 3600);
   return (
-    <Button className="h-full p-0" onPress={props.onPress}>
-        <Card className="max-w-[400px]">
-            <CardHeader className="flex gap-3">
+    <Button className="h-full sm:w-[21em]  p-0" onPress={props.onPress}>
+        <Card className="w-full">
+            <CardHeader className="flex  flex-wra gap-3">
                 <div className="flex gap-3">
-                    <Chip radius="sm" color="primary">2</Chip>
-                    <Chip radius="sm" color="success">3</Chip>
-                    <Chip radius="sm" color="warning">8</Chip>
-                    <Chip radius="sm" color="danger">4</Chip>
+                    <Chip radius="sm" color="danger">{props.locationData?.inactive_employee_count ?? 0}</Chip>
+                    <Chip radius="sm" className="bg-[#0EAD69] text-white">{props.locationData.active_employee_count}</Chip>
+                    <Chip radius="sm" className="bg-[#E19842] text-white">{props.locationData.total_absent_employees}</Chip>
+                    <Chip radius="sm" className="bg-[#CB42E1] text-white">{props.locationData.total_vacation_employees}</Chip>
                 </div>
 
                 <div className="flex bg-green-600 w-full rounded-md p-1 px-4">
-                    <p className="text-md text-white">NextUI</p>
+                    <p className="text-md text-white">{Number.isNaN(total) ? '0' : total}</p>
                 </div>
             </CardHeader>
             <Divider/>
             
             <CardBody>
-                <p>Address</p>
+                <p className="text-wrap" >{props.locationData.address ?? ''}</p>
             </CardBody>
 
             <Divider/>

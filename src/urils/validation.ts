@@ -26,10 +26,13 @@ export const validatePassword = (password: string) => {
 
 const regex = {
     'email': /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    'name': /^[A-Za-z\s0-9]*$/,
+    'name': /^[A-Za-z]*$/,
     'phone': /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
     'number': /[0-9]/,
     'text': /^(\w)*$/,
+    'fullName': /^(\w)*$/,
+    'street': /^\s*\S+(?:\s+\S+){2}/,
+    '': /.*/,
     'password': /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
 }
 
@@ -47,15 +50,20 @@ export const validateFields = (type: any, data: string, label: string)=>{
         if(key == type){
             if(data){
                 var reg = value.test(String(data).toLocaleLowerCase());
-                if(!reg) msg = `Invalid ${label}`;
-                if(type == 'password' && !reg) msg = `Passwort should contain at least 1 
-                <br>Number [0-9] 
-                <br>Uppercase [A-Z] 
-                <br>Lowercase [a-z] 
-                <br>Special character [@$!%*#?&]`;
-                else msg = true;
+                
+                if(!reg){
+                    msg = `Invalid ${label}`;
+                    if(type == 'password') {
+                        msg = `Passwort should contain at least 1 
+                        Number [0-9], 
+                        Uppercase [A-Z], 
+                        Lowercase [a-z], 
+                        Special character [@$!%*#?&]`;
+                    }
+                } else {msg = true;}
             }else msg = 'This field is required'
         }
+        
     });
     return msg;
 }

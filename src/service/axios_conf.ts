@@ -7,7 +7,7 @@ import { LocalStorageService } from "./local_storage";
 
   const axiosInstance = axios.create({
       baseURL: import.meta.env.VITE_COUNTEDT_TECH_COMPANY_URL,
-      timeout: 6000,
+      timeout: 10000,
       headers: {
           "Content-Type": "multipart/form-data"
       }

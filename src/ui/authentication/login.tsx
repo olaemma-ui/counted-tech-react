@@ -18,8 +18,6 @@ export const Login = ()=>{
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
     
-    const [active, setActive] = useState<boolean>(false);
-    
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     const [error, setError] = useState({
@@ -47,20 +45,9 @@ export const Login = ()=>{
     }
 
     function hanldPasswordOnchange(element: any) {
-        const pswValid = validatePassword(element.target.value);
-        if(!pswValid){
-            return setError({
-                ...error,
-                password: 'Password match fails',
-            })
-        }
         setLoginData({
             ...loginData,
             password: element.target.value
-        })
-        setError({
-            ...error,
-            password: '',
         })
     }
 
@@ -76,10 +63,11 @@ export const Login = ()=>{
                 
                 if(typeof(response.data) === typeof('')) setErrorMessage(response.data);
                 else {
-                    var loginResp = LoginResponseConvert.toLoginResponse(response.data);
+                    var loginResp = LoginResponseConvert.toLoginResponse(JSON.stringify(response.data));
 
                     if (loginResp.status) {
-                        LocalStorageService.setItem(LocalStoragekey.IS_AUTHENTICATED, loginResp.user?.token);
+                        LocalStorageService.setItem(LocalStoragekey.IS_AUTHENTICATED, true);
+                        LocalStorageService.setItem(LocalStoragekey.BEARER_TOKEN, loginResp.user?.token);
                         navigate('/dashboard');
                     }else setErrorMessage(loginResp.message ??  'Status [Not active]');
                 }

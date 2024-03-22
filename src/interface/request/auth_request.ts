@@ -29,21 +29,21 @@ export class LoginRequestConvert {
 //   const registerRequest = RegisterRequestConvert.toRegisterRequest(json);
 
 export interface RegisterRequest {
-    email?:                string;
-    password?:             string;
-    name?:                 string;
-    surname?:              string;
-    companyName?:          string;
-    logo?:                 string;
-    phone?:                string;
-    zipcode?:              string;
-    street?:               string;
-    stateID?:              string;
-    legalEntityID?:        string;
-    passwordConfirmation?: string;
-    ort?:                  string;
-    location?:             string;
-    contactPerson?:        string;
+    email?:                 string;
+    password?:              string;
+    name?:                  string;
+    surname?:               string;
+    company_name?:          string;
+    phone?:                 string;
+    zipcode?:               string;
+    street?:                string;
+    state_id?:              string;
+    legal_entity_id?:       string;
+    password_confirmation?: string;
+    ort?:                   string;
+    location?:              string;
+    contact_person?:        string;
+    logo?:                  any;
 }
 
 // Converts JSON strings to/from your types
