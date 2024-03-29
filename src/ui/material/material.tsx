@@ -1,209 +1,346 @@
-import { Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Spinner } from "@nextui-org/react";
-import { ArrowDownIcon, CheckIcon, TrashIcon } from "../../_components/svg_components";
+import { Button, Divider, Input, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Spinner } from "@nextui-org/react";
+import { CheckIcon, TrashIcon } from "../../_components/svg_components";
 import {useAsyncList} from "@react-stately/data";
 
 
 import '../style/dashboard.css'
-import React from "react";
+import {useState, useMemo, useEffect} from "react";
+import { axiosInstance } from "../../service/axios_conf";
+import { LocalStorageService } from "../../service/local_storage";
+import { LocalStoragekey } from "../../_constants/enums";
+import { toFormData } from "axios";
+import { Material, MaterialConvert, MaterialRequest, MaterialRequestConvert } from "../../interface/request/materials";
+import { toast, Bounce, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+import ConfirmDialog from "../dashboard/dialogs/confirm_dialog";
 
 
 export const MaterialsPage = ()=>{
 
+    const [allMaterialListener, setAllMaterialListener] = useState<string>('');
+
     
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    
+    const [isLoadingCreateMaterial, setIsLoadingCreateMaterial] = useState<boolean>(false);
+    const [isLoadingAllMaterial, setIsLoadingAllMaterial] = useState<boolean>(false);
+    const [isLoadingDeleteMaterial, setIsLoadingDeleteMaterial] = useState<boolean>(false);
+
+    const [deleteMaterialDialogObject, setDeleteMaterialDialogObject] = useState({
+        isOpen: false,
+        isYes: false,
+        isNo : false,
+        materialId: 0
+    });
+    
+    // const [deleteDialogMessage, setDeleteDialogMessage] = useState<string>('');
+    // const [deleteMaterialDialogObject, setDeleteMaterialDialogObject] = useState<boolean>(false);
+    
+    // const [deleteDialogMessage, setDeleteDialogMessage] = useState<string>('');
+    // const [deleteMaterialDialogObject, setDeleteMaterialDialogObject] = useState<boolean>(false);
+    
+    // const [deleteDialogMessage, setDeleteDialogMessage] = useState<string>('');
+    // const [deleteMaterialDialogObject, setDeleteMaterialDialogObject] = useState<boolean>(false);
+    
+    const [materialName, setMaterialName] = useState<string>();
+    const [materials, setMaterials] = useState<Material[]>();
+    const [materialRequests, setMaterialRequest] = useState<MaterialRequest[]>();
+
+
+    async function handleCreateMaterial (){
+        setIsLoadingCreateMaterial(true);
+        const addressId = LocalStorageService.getItem(LocalStoragekey.ADDRESS_ID);
+        await axiosInstance.post(`company/material`, toFormData({
+            address_id: addressId,
+            name: materialName,
+        }))
+        .then((response) => {
+            if (response.data.status) {
+                setAllMaterialListener(`create-listen ${Math.random() * 1000}`);
+                setMaterialName('');
+                toast.success(response.data.message, {
+                  position: "top-right",
+                  autoClose: 5000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                  theme: "dark",
+                  transition: Bounce,
+                });
+              }
+        }).catch((e) => e)
+        setIsLoadingCreateMaterial(false);
+    }
+
+
+    async function handleDeleteMaterial (){
+        setIsLoadingDeleteMaterial(true)
+        await axiosInstance.delete(`company/material/${deleteMaterialDialogObject.materialId}`)
+        .then((response) => {
+            if (response.data.status) {
+                setAllMaterialListener(`delete ${deleteMaterialDialogObject.materialId}`);
+                toast.success(response.data.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    transition: Bounce,
+                });
+            }
+        }).catch((e) => e)
+
+        setDeleteMaterialDialogObject({
+            ...deleteMaterialDialogObject,
+            isYes: true,
+            isNo: false,
+            isOpen: false,
+        })
+        
+
+        setIsLoadingDeleteMaterial(false)    
+    }
+
+
+
+    async function handleMaterialRequest (materialId: number, status: string){
+        
+        await axiosInstance.post(`company/material/update-material-request/${materialId}`, {
+            status
+        })
+        .then((response) => {
+            // const data = MaterialConvert.toMaterial(JSON.stringify(response.data.data));
+            // setMaterialRequest(data)
+        }).catch((e) => e)
+    }
+
+            
+    async function fetchAllMaterials () {
+        setIsLoadingAllMaterial(true);
+        const addressId = LocalStorageService.getItem(LocalStoragekey.ADDRESS_ID);
+        await axiosInstance.get(`company/material-list/${addressId}`)
+        .then((response) => {
+            const data: Material[] = [];
+            response.data.data.forEach((element: any) => {
+                data.push(MaterialConvert.toMaterial(JSON.stringify(element)))
+            });
+            setMaterials(data)
+        }).catch((e) => e)
+        setIsLoadingAllMaterial(false);
+    }
+    
+
+    async function fetchAllMaterialRequest () {
+        const addressId = LocalStorageService.getItem(LocalStoragekey.ADDRESS_ID);
+        await axiosInstance.get(`company/material-request/${addressId}`)
+        .then((response) => {
+            const data: MaterialRequest[] = [];
+            response.data.data.forEach((element: any) => {
+                data.push(MaterialRequestConvert.toMaterialRequest(JSON.stringify(element)))
+            });
+            setMaterialRequest(data)
+        }).catch((e) => e)
+    }
+
+
+    useEffect(()=>{
+        fetchAllMaterials();
+        fetchAllMaterialRequest();
+    }, [allMaterialListener])
+    
+
 
     let list = useAsyncList({
         async load({signal}) {
-        let res = await fetch('https://swapi.py4e.com/api/people/?search', {
-            signal,
-        });
-        let json = await res.json();
-        setIsLoading(false);
+            const addressId = LocalStorageService.getItem(LocalStoragekey.ADDRESS_ID);
 
-        return {
-            items: json.results,
-        };
+            let response = await axiosInstance.get(`company/material-request-list/${addressId ?? 17}`,{
+                signal
+            });
+            let json = await response?.data?.data;
+            setIsLoading(false);
+
+            return {
+                items: json,
+            };
         },
         async sort({items, sortDescriptor}) {
-        return {
-            items: items.sort((a: any, b: any) => {
-                let second = b[sortDescriptor?.column ?? 0];
-                let first = a[sortDescriptor?.column ?? 0];
-            let cmp = (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1;
+            return {
+                items: items.sort((a: any, b: any) => {
+                    let second = b[sortDescriptor?.column ?? 0];
+                    let first = a[sortDescriptor?.column ?? 0];
+                let cmp = (parseInt(first) || first) < (parseInt(second) || second) ? -1 : 1;
 
-            if (sortDescriptor.direction === "descending") {
-                cmp *= -1;
-            }
+                if (sortDescriptor.direction === "descending") {
+                    cmp *= -1;
+                }
 
-            return cmp;
-            }),
-        };
+                    return cmp;
+                }),
+            };
         },
     });
 
     
-    const [selectedUnit, setSelectedUnit] = React.useState(new Set([]));
+    // const [selectedUnit, setSelectedUnit] = useState(new Set([]));
 
-    const selectedUnitValue = React.useMemo(
-        () => (Array.from(selectedUnit).join(", ") as String).replaceAll("_", " "),
-        [selectedUnit]
-    );
+    // const selectedUnitValue = useMemo(
+    //     () => (Array.from(selectedUnit).join(", ") as String).replaceAll("_", " "),
+    //     [selectedUnit]
+    // );
 
     
-    const [selectedMaterial, setselectedMaterial] = React.useState(new Set([]));
+    // const [selectedMaterial, setselectedMaterial] = useState(new Set([]));
 
-    const selectedMaterialValue = React.useMemo(
-        () => (Array.from(selectedMaterial).join(", ") as String).replaceAll("_", " "),
-        [selectedMaterial]
-    );
+    // const selectedMaterialValue = useMemo(
+    //     () => (Array.from(selectedMaterial).join(", ") as String).replaceAll("_", " "),
+    //     [selectedMaterial]
+    // );
 
     return (<>
-        <div className="py-5  h-[100dvh] flex items-center justify-center">
-           <div className="sm:flex gap-8 sm:my-0 my-5 sm:p-8 p-4 rounded-xl bg-white m-4 w-full sm:h-[80vh] h-full overflow-auto">
-                <div className="content w-full max-w-[18em]">
-                    <div className="left flex gap-2">
+        <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+        />
+        <Button 
+            onPress={()=>{
+                window.history.back()
+            }}
+            className="text-white mt-5 bg-[#4269E1] px-4">
+            {'Back'}
+        </Button>
+        <div className="py-5 flex items-center justify-center">
+           <div className="flex flex-col md:flex-row gap-8 sm:my-0 my-5 sm:p-8 p-4 rounded-xl bg-white m-4 w-full sm:h-[95vh] h-full overflow-auto">
+                <div className="content flex md:flex-col flex-row gap-5 sm:w-[30em] w-full sm:max-w-full max-w-[18em]">
+                    <div className="left w-full flex gap-2">
                         <Input 
                             size="md"
                             radius="sm"
                             placeholder="Material name"
+                            value={materialName}
+                            isReadOnly={isLoadingCreateMaterial}
+                            onChange={(e)=>{
+                                setMaterialName(e.target.value);
+                            }}
                             className="rounded-sm shadow-md bg-white w-full"
                         />                    
                         <Button
                             isIconOnly
                             className="rounded-md bg-[#0EAD69]"
+                            isLoading={isLoadingCreateMaterial}
+                            onPress={handleCreateMaterial}
                         >
                             <CheckIcon/>
                         </Button>
                     </div>
 
-                    <Divider className=" h-[0.12em] bg-[#4269E1] my-5"/>
+                    <Divider className=" h-[0.15em] bg-[#4269E1]"/>
                     
-                    <div className="left flex gap-2">
-                        <Input 
-                            size="md"
-                            radius="sm"
-                            placeholder="Material name"
-                            className="rounded-sm shadow-lg w-full"
-                        />                    
-                        <Button
-                            isIconOnly
-                            className="rounded-md bg-[#AD0E0E]"
-                        >
-                            <TrashIcon width="20" height="20"/>
-                        </Button>
+                    <div className="flex flex-col gap-4">
+                        {isLoadingAllMaterial && <>
+                            <div className="flex gap-4 items-center">
+                                <p className="text-black">Fetching Update</p>
+                                <Spinner size="sm"/>
+                            </div>
+                        </>}
+                        {
+                            materials?.map((elem) => {
+                                return <div className="left w-full flex gap-2">
+                                    <Input 
+                                        size="md"
+                                        radius="sm"
+                                        placeholder="Material name"
+                                        value={elem.name}
+                                        isReadOnly
+                                        className="rounded-sm shadow-lg w-full"
+                                    />                    
+                                    <Button
+                                        isIconOnly
+                                        isLoading={isLoadingDeleteMaterial}
+                                        onPress={()=>{
+                                            setDeleteMaterialDialogObject({
+                                                isOpen: true,
+                                                materialId: elem.id,
+                                                isYes: false,
+                                                isNo: false,
+                                            })
+                                        }}
+                                        className="rounded-md bg-[#AD0E0E]"
+                                    >
+                                        <TrashIcon width="20" height="20"/>
+                                    </Button>
+                                </div>
+        
+                            })
+                        }
                     </div>
-
                 </div>
 
+                <Divider className=" h-[0.12em] bg-[#4269E1] sm:hidden block"/>
+
                 <div className="content w-full sm:m-0 my-5 pb-5">
-                    <div className="left flex sm:flex-row flex-col sm:gap-2 gap-4">
-                        <Input 
-                            isReadOnly
-                            size="md"
-                            radius="sm"
-                            placeholder="Surename Name"
-                            className="rounded-sm shadow-lg w-full"
-                            />                    
-                        <Input 
-                            isReadOnly
-                            size="md"
-                            radius="sm"
-                            placeholder="Material"
-                            className="rounded-sm shadow-lg w-full"
-                            />                    
-                        <Input 
-                            isReadOnly
-                            size="md"
-                            radius="sm"
-                            placeholder="4 kg"
-                            className="rounded-sm shadow-lg"
-                        />                   
-                        <div className="flex gap-4 sm:m-0 mt-3">
-                            <Button
-                                isIconOnly
-                                className="rounded-md bg-[#0EAD69]">
-                                <CheckIcon/>
-                            </Button>
-                            <Button
-                                isIconOnly
-                                className="rounded-md bg-[#AD0E0E]">
-                                <TrashIcon/>
-                            </Button>
-                        </div> 
-                    </div>
-
-                    <Divider className=" h-[0.12em] bg-[#4269E1] my-5"/>
-                    <div className="left flex sm:flex-row flex-col gap-2">
-                        <Dropdown showArrow>
-                            <DropdownTrigger>
-
-                                <div className={`p-4 flex items-center gap-2 justify-between rounded-xl h-[3.1em] ${selectedMaterialValue? 'text-black': 'text-gray-500 text-sm font-normal'} shadow-md w-full text-left `}>
-                                {selectedMaterialValue ? selectedMaterialValue : 'Material'}
-                                <ArrowDownIcon width="20" height="20" className="self-end justify-self-end" />
-                                </div>
-                            </DropdownTrigger>
-                            <DropdownMenu 
-                                aria-label="Single selection example"
-                                variant="flat"
-                                disallowEmptySelection
-                                selectionMode="single"
-                                selectedKeys={selectedMaterial}
-                                onSelectionChange={setselectedMaterial}
-                            >
-                                <DropdownItem key="text" className="text-black">Text</DropdownItem>
-                                <DropdownItem key="number" className="text-black">Number</DropdownItem>
-                                <DropdownItem key="date" className="text-black">Date</DropdownItem>
-                                <DropdownItem key="single_date" className="text-black">Single Date</DropdownItem>
-                                <DropdownItem key="iteration" className="text-black">Iteration</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>               
-                        <Input 
-                            // isReadOnly
-                            size="lg"
-                            radius="sm"
-                            placeholder="Art.-Nr."
-                            className="rounded-sm shadow-lg w-full"
-                            />                    
-                        <Input 
-                            isReadOnly
-                            size="lg"
-                            radius="sm"
-                            placeholder="#"
-                            className="rounded-sm shadow-lg w-ful"
-                        />                   
-
-                        <Dropdown showArrow>
-                            <DropdownTrigger>
-
-                                <div className={`p-4 flex items-center gap-2 justify-between rounded-xl h-[3.1em] ${selectedUnitValue? 'text-black': 'text-gray-500 text-sm font-normal'} shadow-md w-full text-left `}>
-                                {selectedUnitValue ? selectedUnitValue : 'Einheit'}
-                                <ArrowDownIcon width="20" height="20" className="self-end justify-self-end" />
-                                </div>
-                            </DropdownTrigger>
-                            <DropdownMenu 
-                                aria-label="Single selection example"
-                                variant="flat"
-                                disallowEmptySelection
-                                selectionMode="single"
-                                selectedKeys={selectedUnit}
-                                onSelectionChange={setSelectedUnit}
-                                >
-
-                                <DropdownItem key="text" className="text-black">Text</DropdownItem>
-                                <DropdownItem key="number" className="text-black">Number</DropdownItem>
-                                <DropdownItem key="date" className="text-black">Date</DropdownItem>
-                                <DropdownItem key="single_date" className="text-black">Single Date</DropdownItem>
-                                <DropdownItem key="iteration" className="text-black">Iteration</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-
-                        <div className="flex gap-4">
-                            <Button
-                                isIconOnly
-                                className="rounded-md bg-[#0EAD69]">
-                                <CheckIcon/>
-                            </Button>
-                        </div> 
+                    
+                    <div className="max-h-[20em] w-full">
+                        {materialRequests?.map((element) => {
+                            return <div className="left flex sm:flex-row flex-col sm:gap-2 gap-4">
+                                <Input 
+                                    isReadOnly
+                                    size="md"
+                                    radius="sm"
+                                    placeholder="Surename Name"
+                                    value={element.user.surname}
+                                    className="rounded-sm shadow-lg w-full"
+                                    />                    
+                                <Input 
+                                    isReadOnly
+                                    size="md"
+                                    radius="sm"
+                                    placeholder="Material"
+                                    value={element.material.name}
+                                    className="rounded-sm shadow-lg w-full"
+                                    />                    
+                                <Input 
+                                    isReadOnly
+                                    size="md"
+                                    radius="sm"
+                                    placeholder="4 kg"
+                                    value={element.unit.name}
+                                    className="rounded-sm shadow-lg"
+                                />                   
+                                <div className="flex gap-4 sm:m-0 mt-3">
+                                    <Button
+                                        isIconOnly
+                                        onPress={()=>{
+                                            handleMaterialRequest(element.material_id, 'approved')
+                                        }}
+                                        className="rounded-md bg-[#0EAD69]">
+                                        <CheckIcon/>
+                                    </Button>
+                                    <Button
+                                        isIconOnly
+                                        onPress={()=>{
+                                            handleMaterialRequest(element.material_id, 'delined')
+                                        }}
+                                        className="rounded-md bg-[#AD0E0E]">
+                                        <TrashIcon/>
+                                    </Button>
+                                </div> 
+                            </div>
+                        })}
                     </div>
 
 
@@ -215,28 +352,28 @@ export const MaterialsPage = ()=>{
                             table: "min-h-[400px] text-black",
                             td: "border-r"
                         }}
-                        className="mt-5 shadow-lg my-5"
+                        className=" max-h-[100%]  shadow-lg"
                         >
                         <TableHeader>
-                            <TableColumn key="vorname" allowsSorting> 
-                                Vorname 
+                            <TableColumn key="surname"> 
+                                Surname 
                             </TableColumn>
-                            <TableColumn key="Name" allowsSorting>
+                            <TableColumn key="name">
                             Name
                             </TableColumn>
-                            <TableColumn key="Material" allowsSorting>
+                            <TableColumn key="material" allowsSorting>
                             Material
                             </TableColumn>
                             <TableColumn key="Art.-Nr" allowsSorting>
                             Art.-Nr
                             </TableColumn>
-                            <TableColumn key="Anzahl" allowsSorting>
+                            <TableColumn key="number">
                             Anzahl
                             </TableColumn>
-                            <TableColumn key="Einheit" allowsSorting>
+                            <TableColumn key="unit" allowsSorting>
                             Einheit
                             </TableColumn>
-                            <TableColumn key="Datum" allowsSorting>
+                            <TableColumn key="datum" allowsSorting>
                             Datum
                             </TableColumn>
                         </TableHeader>
@@ -247,7 +384,18 @@ export const MaterialsPage = ()=>{
                         >
                             {(item : any) => (
                             <TableRow key={item.name}>
-                                {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+                                {(columnKey) => {
+                                    
+                                    let date = getKeyValue(item, 'created_at');
+
+                                    return <TableCell>
+                                        {columnKey == 'name' || columnKey == 'surname' ? getKeyValue(item.user, columnKey) : ''}
+                                        {columnKey == 'unit' ? getKeyValue(item.unit, 'name') : ''}
+                                        {columnKey == 'material' ? getKeyValue(item.material, 'name') : ''}
+                                        {columnKey == 'number' ? getKeyValue(item, columnKey) : ''}
+                                        {columnKey == 'datum' ? `${date.split('T')[0]}` : ''}
+                                    </TableCell>
+                                }}
                             </TableRow>
                             )}
                         </TableBody>
@@ -258,5 +406,21 @@ export const MaterialsPage = ()=>{
                 </div>
            </div>
         </div>
+
+        { deleteMaterialDialogObject.isOpen && <ConfirmDialog
+            message={'Are you sure you want to delete this material ?'}
+            onNo={()=>{
+                setDeleteMaterialDialogObject({
+                    ...deleteMaterialDialogObject,
+                    isYes: false,
+                    isNo: true,
+                    isOpen: false,
+                })
+            }}
+            isLoading={isLoadingDeleteMaterial}
+            onYes={()=>{
+                handleDeleteMaterial()
+            }}
+        />}
     </>);
 }

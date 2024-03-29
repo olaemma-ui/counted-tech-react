@@ -5,4 +5,5 @@ export enum LocalStoragekey {
     IS_AUTHENTICATED,
     USER_DATA,
     ADDRESS_DATA,
+    ADDRESS_ID,
 }

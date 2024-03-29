@@ -334,7 +334,7 @@ export const Signup = ()=>{
                                         'email'
                                     )
                                 }}
-                                className="shadow-large rounded-3xl bg-[#FFFFFF]" />
+                                className="shadow-large text-black rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
                                     {error.email}
                                 </small>

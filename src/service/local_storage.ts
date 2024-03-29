@@ -12,6 +12,8 @@ export class LocalStorageService {
     static getItem<T>(key: LocalStoragekey): T | null {
         const item = localStorage.getItem(key.toString());
         if (!item) return null;
+        console.log({item});
+        
         return JSON.parse(item) as T;
     }
 
@@ -25,19 +27,3 @@ export class LocalStorageService {
         localStorage.clear();
     }
 }
-
-  // Usage
-//   const storageService = new LocalStorageService();
-  
-//   // Set an item
-//   storageService.setItem('user', { name: 'John Doe', age: 30 });
-  
-//   // Get an item
-//   const user = storageService.getItem<{ name: LocalStoragekey; age: number }>('user');
-//   console.log(user);
-  
-//   // Remove an item
-//   storageService.removeItem('user');
-  
-//   // Clear all items
-//   storageService.clear();

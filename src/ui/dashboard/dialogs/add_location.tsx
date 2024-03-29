@@ -7,7 +7,9 @@ import { validateFields } from "../../../urils/validation";
 import { convertDateFormat } from "../../../urils/utils";
 import { toFormData } from "axios";
 import { axiosInstance } from "../../../service/axios_conf";
-import { ToastContainer, toast } from 'react-toastify';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -316,7 +318,7 @@ export function AddLocation(props: AddLocationProps) {
                   </div>
                    <div className="w-full">
                     <Dropdown showArrow>
-                        <DropdownTrigger>
+                        <DropdownTrigger >
 
                           <div className={`p-4 flex items-center gap-2 justify-between rounded-xl h-[3.1em] ${selectedValue? 'text-black': 'text-gray-500 text-sm font-normal'} ${createLocationRequestDataError.job_title_id && `border border-red-500 h-[4em]`} shadow-md w-full text-left `}>
                             {selectedValue ? selectedValue.name : 'Art der Arbeit'}

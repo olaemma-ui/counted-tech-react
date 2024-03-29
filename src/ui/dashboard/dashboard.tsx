@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import { ViewEmployees } from "./dialogs/view_user";
 import { axiosInstance } from "../../service/axios_conf";
 import { DashboardData, DashboardDataConvert, JobData, JobDataConvert, LocationData, LocationDataConvert } from "../../interface/response/dashboard_data";
+import { LocalStorageService } from "../../service/local_storage";
+import { LocalStoragekey } from "../../_constants/enums";
 
 export const Dashboard = ()=> {
     const navigate = useNavigate();
@@ -30,7 +32,8 @@ export const Dashboard = ()=> {
     
     const [jobData, setJobData] = useState<JobData>({});
 
-    function handleMaterialPress() {
+    function handleMaterialPress(id: any) {
+        LocalStorageService.setItem(LocalStoragekey.ADDRESS_ID, id);
         navigate('/dashboard/materials');
     }
 
@@ -65,7 +68,7 @@ export const Dashboard = ()=> {
         .then((response) => {
             const data = DashboardDataConvert.toDashboardData(JSON.stringify(response.data.data));
             setDashboardData(data)
-        }).catch((e))
+        }).catch((e) => e)
     }
     
     async function fetchLocationData () {
@@ -73,6 +76,9 @@ export const Dashboard = ()=> {
         .then((response) => {
             const data = response.data.data;
             const list : LocationData[] = [];
+
+            console.log({data});
+            
 
             data.forEach((element : any) => {
                 list.push(LocationDataConvert.toLocationData(JSON.stringify(element)))
@@ -92,7 +98,7 @@ export const Dashboard = ()=> {
             });
 
             setJobDataList(list);
-        }).catch((e))
+        }).catch((e) => e)
     }
 
     useEffect(() => {
@@ -168,7 +174,10 @@ export const Dashboard = ()=> {
                         <NavbarItem className="flex gap-6 flex-wrap items-start justify-start">
                         {
                             menu.map((e) =>{
-                                    return <Button key={(100 + Math.random() + 999)} isIconOnly onClick={e.onclick} className="bg-[#4269E1] h-[4em] w-[4em] rounded-md">
+                                    return <Button key={(100 + Math.random() + 999)} 
+                                    isIconOnly 
+                                    onClick={e.onclick} 
+                                    className="bg-[#4269E1] h-[4em] w-[4em] rounded-md">
                                         {e.icon}
                                     </Button>
                             })
@@ -205,7 +214,9 @@ export const Dashboard = ()=> {
                         return <DashboardAddressCard 
                         key={1000 + Math.random() + 9999}
                         locationData={location}
-                        onMaterialsClick={handleMaterialPress} 
+                        onMaterialsClick={()=>{
+                            handleMaterialPress(location.id)
+                        }} 
                         onEyeClick={()=>{setViewEmployee(true)}}
                         onPress={()=>{
                             setJobData(jobDataList.filter((job) => job.id == location.job_title_id)[0]);
