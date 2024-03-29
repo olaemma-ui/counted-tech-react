@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import {Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Avatar, ModalFooter, Button} from "@nextui-org/react";
-import { useNavigate } from "react-router-dom";
+import {Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, ModalFooter, Button} from "@nextui-org/react";
+import { CheckedSuccessSvg } from "../../../_components/svg_components";
 
 interface MessageDialogProps{
     onClose?: () => void,

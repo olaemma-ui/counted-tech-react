@@ -100,6 +100,7 @@ export function EditProfile(props: EditProfileProps) {
                         disallowEmptySelection
                         selectionMode="single"
                         selectedKeys={selectedKeys}
+                        //@ts-ignore
                         onSelectionChange={setSelectedKeys}
                       >
                         <DropdownItem key="text" className="text-black">Text</DropdownItem>

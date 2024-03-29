@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+
 import {Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Avatar} from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 

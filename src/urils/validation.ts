@@ -41,8 +41,9 @@ const regex = {
  * 
  * @param type This is the type of 
  * @param data 
+ * @returns 
  */
-export const validateFields = (type: any, data: string, label: string)=>{
+export const validateFields = (type: any, data: string | File, label: string) : boolean | string=>{
 
     let msg:string | boolean = '';
     Object.entries(regex).forEach(([key, value]) => {

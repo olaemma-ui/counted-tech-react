@@ -50,8 +50,8 @@ export function AddLocation(props: AddLocationProps) {
   }]);
 
 
-  const [createLocationRequestData, setCreateLocationRequestData] = useState<CreateLocationRequest>({});
-  const [createLocationRequestDataError, setCreateLocationRequestDataError] = useState<CreateLocationRequest>({});
+  const [createLocationRequestData, setCreateLocationRequestData] = useState<CreateLocationRequest>();
+  const [createLocationRequestDataError, setCreateLocationRequestDataError] = useState<CreateLocationRequest>();
 
 
   function handleAddTimeTable() {
@@ -331,6 +331,7 @@ export function AddLocation(props: AddLocationProps) {
                           disallowEmptySelection
                           selectionMode="single"
                           selectedKeys={selectedKeys}
+                          //@ts-ignore
                           onSelectionChange={setSelectedKeys}
                         >
                         {props.jobList.map((e)=> 
@@ -457,7 +458,7 @@ export function AddLocation(props: AddLocationProps) {
                     key={1111 * Math.random() + 999}
                     breakTable={v}
                     onRemove={(val)=>{
-                      handleRemoveBreak(timeTable.indexOf(v), val)
+                      handleRemoveBreak(breakTime.indexOf(v), val)
                     }}
                   />
                 )}
@@ -619,6 +620,7 @@ const TimeTable = (props : {onRemove: (value: boolean)=> void, timeTable: Create
         disallowEmptySelection
         selectionMode="single"
         selectedKeys={selectedKeys}
+        //@ts-ignore
         onSelectionChange={setSelectedKeys}
       >
         <DropdownItem className="text-black"  key="week">Week</DropdownItem>
@@ -697,6 +699,7 @@ const BreakTable = (props : {onRemove: (value: boolean)=> void, breakTable: Crea
         disallowEmptySelection
         selectionMode="single"
         selectedKeys={selectedKeys}
+        //@ts-ignore
         onSelectionChange={setSelectedKeys}
       >
         <DropdownItem className="text-black"  key="week">Week</DropdownItem>

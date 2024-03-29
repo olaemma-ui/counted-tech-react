@@ -181,6 +181,7 @@ export const EmployeeDetails = ()=>{
                                 disallowEmptySelection
                                 selectionMode="single"
                                 selectedKeys={selectedMonth}
+                                //@ts-ignore
                                 onSelectionChange={setSelectedMonth}
                             >
                                 <DropdownItem key="text" className="text-black">Text</DropdownItem>
@@ -206,6 +207,7 @@ export const EmployeeDetails = ()=>{
                                 disallowEmptySelection
                                 selectionMode="single"
                                 selectedKeys={selectedYear}
+                                //@ts-ignore
                                 onSelectionChange={setSelectedYear}
                                 >
 

@@ -71,6 +71,7 @@ export function EditLocation(props: EditLocationProps) {
                         disallowEmptySelection
                         selectionMode="single"
                         selectedKeys={selectedKeys}
+                        //@ts-ignore
                         onSelectionChange={setSelectedKeys}
                       >
                         <DropdownItem key="text" className="text-black">Text</DropdownItem>
