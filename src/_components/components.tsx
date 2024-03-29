@@ -1,7 +1,7 @@
 
-import React from "react";
-import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image, Chip, Button} from "@nextui-org/react";
-import { CalendarIcon, EyeIcon, SettingsIcon, SyncIcon, TodoListIcon } from "./svg_components";
+
+import {Card, CardHeader, CardBody, CardFooter, Divider, Chip, Button} from "@nextui-org/react";
+import { CalendarIcon, EyeIcon, SyncIcon, TodoListIcon } from "./svg_components";
 import { LocationData } from "../interface/response/dashboard_data";
 
 
@@ -31,7 +31,7 @@ export const DashboardCard = (props: DahboardCardProps)=> {
             {props.multiValue && 
               <div className="flex gap-4">
                   {props.multiValue.map((e, i) => 
-                    <div className={`mt-3 p-2 w-full rounded-lg text-white ${props.multiColor ? props.multiColor[i] : ''}`}>
+                    <div key={e} className={`mt-3 p-2 w-full rounded-lg text-white ${props.multiColor ? props.multiColor[i] : ''}`}>
                         {props.multiValue ? props.multiValue[i] : ''}
                     </div>)}
               </div>

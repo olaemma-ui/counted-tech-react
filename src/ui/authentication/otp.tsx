@@ -1,6 +1,8 @@
 
 import { Button } from "@nextui-org/react";
 import { AuthenticationLayout } from "./layout/layout";
+
+//@ts-ignore
 import OTPInput from "otp-input-react";
 import { useState } from "react";
 

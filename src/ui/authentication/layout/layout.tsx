@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import appLogo from '../../../assets/COUNTED Logo 1.svg';
 import { Link } from "react-router-dom";
 

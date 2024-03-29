@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { Login } from "../ui/authentication/login";
 
 interface ProtectedRouteProps{
     children?: ReactNode,

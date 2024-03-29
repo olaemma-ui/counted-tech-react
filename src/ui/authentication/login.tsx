@@ -3,7 +3,7 @@ import { AuthenticationLayout } from "./layout/layout";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { LoginRequest } from "../../interface/request/auth_request";
-import { validateEmail, validatePassword } from "../../urils/validation";
+import { validateEmail} from "../../urils/validation";
 import { axiosInstance, toFormData } from "../../service/axios_conf";
 import { LoginResponseConvert } from "../../interface/response/login_response";
 import { LocalStorageService } from "../../service/local_storage";
@@ -73,7 +73,7 @@ export const Login = ()=>{
                 }
 
             })
-            .catch((error) => {
+            .catch(() => {
                 setErrorMessage('Error occurred, try again')
             })
 

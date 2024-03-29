@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button, Input, useDisclosure} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, Button, Input} from "@nextui-org/react";
 
 import appLogo from '../../assets/COUNTED Logo 1.svg';
 
