@@ -13,16 +13,14 @@ export const ProptectedRoute = (props: ProtectedRouteProps)=>{
     const url = window.location.pathname;
 
 
-    if (url.includes('login') || url === "/") {
-        if(isAuthenticated) navigate('/dashboard');
-        else return props.children;
-    }else{
-        // if(!isAuthenticated) navigate('/');
-    }
+    // if (url.includes('login') || url === "/") {
+    //     if(isAuthenticated) navigate('/dashboard');
+    //     // else return props.children;
+    // }else{
+    //     if(!isAuthenticated) navigate('/');
+    // }
 
     return (<>
-        {props.children }    
-        {/* { isAuthenticated && props.children }    
-        { !isAuthenticated && <Login/>} */}
+        {props.children }
     </>);
 }

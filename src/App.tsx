@@ -12,6 +12,7 @@ import { Dashboard } from "./ui/dashboard/dashboard";
 import { MaterialsPage } from "./ui/material/material";
 import { EmployeeDetails } from "./ui/employee/view_employee";
 import { Chat } from "./ui/chat/chat";
+import { DahsboardLayout } from "./ui/dashboard/layout/dashboard_layout";
 
 function App() {
 
@@ -30,7 +31,7 @@ function App() {
                 </ProptectedRoute>
               }/>
              
-              {/* <Route path={'/test'} element={<AddLocation/>}/> */}
+              {/* <Route path={'/test'} element={<DahsboardLayout/>}/> */}
               <Route path={'/register'} element={<Signup/>}/>
               <Route path={'/forget-password'} element={<ForgotPassword/>}/>
               <Route path={'/otp-verification'} element={<OtpVerification/>}/>

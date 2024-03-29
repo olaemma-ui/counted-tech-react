@@ -12,7 +12,6 @@ export class LocalStorageService {
     static getItem<T>(key: LocalStoragekey): T | null {
         const item = localStorage.getItem(key.toString());
         if (!item) return null;
-        console.log({item});
         
         return JSON.parse(item) as T;
     }

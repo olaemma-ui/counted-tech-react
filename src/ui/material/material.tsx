@@ -216,13 +216,6 @@ export const MaterialsPage = ()=>{
             pauseOnHover
             theme="dark"
         />
-        <Button 
-            onPress={()=>{
-                window.history.back()
-            }}
-            className="text-white mt-5 bg-[#4269E1] px-4">
-            {'Back'}
-        </Button>
         <div className="py-5 flex items-center justify-center">
            <div className="flex flex-col md:flex-row gap-8 sm:my-0 my-5 sm:p-8 p-4 rounded-xl bg-white m-4 w-full sm:h-[95vh] h-full overflow-auto">
                 <div className="content flex md:flex-col flex-row gap-5 sm:w-[30em] w-full sm:max-w-full max-w-[18em]">
@@ -408,6 +401,13 @@ export const MaterialsPage = ()=>{
         </div>
 
         { deleteMaterialDialogObject.isOpen && <ConfirmDialog
+            icon={<>
+                <div className="bg-red-500 p-4 rounded-full w-fit mt-3">
+                <TrashIcon width="30" height="30" />
+                </div>
+            </>}
+
+            title="Delete Job Title ?"
             message={'Are you sure you want to delete this material ?'}
             onNo={()=>{
                 setDeleteMaterialDialogObject({

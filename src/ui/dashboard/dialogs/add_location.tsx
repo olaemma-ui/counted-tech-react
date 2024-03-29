@@ -163,6 +163,7 @@ export function AddLocation(props: AddLocationProps) {
             setErrorMessage(response.data);
           }
           else {
+            console.log('respo = ', response.data);
             
             if (response.data.status) {
               toast.success(response.data.message, {
@@ -264,7 +265,7 @@ export function AddLocation(props: AddLocationProps) {
                         variant="flat"
                         isReadOnly={isLoading}
                         classNames={{
-                            inputWrapper: `${createLocationRequestDataError.address && 'border border-red-600'}`
+                            inputWrapper: `${createLocationRequestDataError?.address && 'border border-red-600'}`
                         }}
                         
                         {...getInputProps({ placeholder: 'Enter location' })}
@@ -289,9 +290,9 @@ export function AddLocation(props: AddLocationProps) {
                   )}
                 </PlacesAutocomplete>
                 
-                    <small className="text-red-500 block mb-3 pl-3 text-left">
+                    {createLocationRequestDataError && <small className="text-red-500 block mb-3 pl-3 text-left">
                         {createLocationRequestDataError.address}
-                    </small>
+                    </small>}
 
                 <div className="sm:flex gap-4">
                   <div className="w-full">
@@ -301,7 +302,7 @@ export function AddLocation(props: AddLocationProps) {
                       type="number"
                       isReadOnly={isLoading}
                       classNames={{
-                          inputWrapper: `${createLocationRequestDataError.radius && 'border border-red-600'}`
+                          inputWrapper: `${createLocationRequestDataError?.radius && 'border border-red-600'}`
                       }}
                       onChange={(e)=>{
                           handleOnchange(
@@ -312,15 +313,15 @@ export function AddLocation(props: AddLocationProps) {
                           )
                       }}
                       className="shadow-md rounded-3xl bg-[#FFFFFF]" />
-                      <small className="text-red-500 block mb-3 pl-3 text-left">
+                      {createLocationRequestDataError && <small className="text-red-500 block mb-3 pl-3 text-left">
                           {createLocationRequestDataError.radius}
-                      </small>
+                      </small>}
                   </div>
                    <div className="w-full">
                     <Dropdown showArrow>
                         <DropdownTrigger >
 
-                          <div className={`p-4 flex items-center gap-2 justify-between rounded-xl h-[3.1em] ${selectedValue? 'text-black': 'text-gray-500 text-sm font-normal'} ${createLocationRequestDataError.job_title_id && `border border-red-500 h-[4em]`} shadow-md w-full text-left `}>
+                          <div className={`p-4 flex items-center gap-2 justify-between rounded-xl h-[3.1em] ${selectedValue? 'text-black': 'text-gray-500 text-sm font-normal'} ${createLocationRequestDataError?.job_title_id && `border border-red-500 h-[4em]`} shadow-md w-full text-left `}>
                             {selectedValue ? selectedValue.name : 'Art der Arbeit'}
                             <ArrowDownIcon width="20" height="20" className="self-end justify-self-end" />
                           </div>
@@ -342,9 +343,9 @@ export function AddLocation(props: AddLocationProps) {
                               </DropdownItem>)}
                         </DropdownMenu>
                       </Dropdown>
-                      <small className="text-red-500 block mb-3 pl-3 text-left">
+                      {createLocationRequestDataError && <small className="text-red-500 block mb-3 pl-3 text-left">
                           {createLocationRequestDataError.job_title_id}
-                      </small>
+                      </small>}
                   </div>
                 </div>
 
@@ -360,7 +361,7 @@ export function AddLocation(props: AddLocationProps) {
                     type="date"
                     isReadOnly={isLoading}
                     classNames={{
-                        inputWrapper: `${createLocationRequestDataError.start_date && 'border border-red-600'}`
+                        inputWrapper: `${createLocationRequestDataError?.start_date && 'border border-red-600'}`
                     }}
                     onChange={(e)=>{
                         handleOnchange(
@@ -371,9 +372,9 @@ export function AddLocation(props: AddLocationProps) {
                         )
                     }}
                     className="shadow-md rounded-3xl bg-[#FFFFFF]" />
-                    <small className="text-red-500 block mb-3 pl-3 text-left">
+                    {createLocationRequestDataError && <small className="text-red-500 block mb-3 pl-3 text-left">
                         {createLocationRequestDataError.start_date?.toString()}
-                    </small>
+                    </small>}
                   </div>
                  
                 <div className="w-full">
@@ -383,7 +384,7 @@ export function AddLocation(props: AddLocationProps) {
                     type="date"
                     isReadOnly={isLoading}
                     classNames={{
-                        inputWrapper: `${createLocationRequestDataError.end_date && 'border border-red-600'}`
+                        inputWrapper: `${createLocationRequestDataError?.end_date && 'border border-red-600'}`
                     }}
                     onChange={(e)=>{
                         handleOnchange(
@@ -394,9 +395,9 @@ export function AddLocation(props: AddLocationProps) {
                         )
                     }}
                     className="shadow-md rounded-3xl bg-[#FFFFFF]" />
-                    <small className="text-red-500 block mb-3 pl-3 text-left">
+                    {createLocationRequestDataError && <small className="text-red-500 block mb-3 pl-3 text-left">
                         {createLocationRequestDataError.end_date?.toString()}
-                    </small>
+                    </small>}
                   </div>
                   <div className="w-full">
                     <Input
@@ -405,7 +406,7 @@ export function AddLocation(props: AddLocationProps) {
                         type="date"
                         isReadOnly={isLoading}
                         classNames={{
-                            inputWrapper: `${createLocationRequestDataError.memory && 'border border-red-600'}`
+                            inputWrapper: `${createLocationRequestDataError?.memory && 'border border-red-600'}`
                         }}
                         onChange={(e)=>{
                             handleOnchange(
@@ -416,9 +417,9 @@ export function AddLocation(props: AddLocationProps) {
                             )
                         }}
                         className="shadow-md rounded-3xl bg-[#FFFFFF]" />
-                        <small className="text-red-500 block mb-3 pl-3 text-left">
+                        {createLocationRequestDataError && <small className="text-red-500 block mb-3 pl-3 text-left">
                             {createLocationRequestDataError.memory?.toString()}
-                        </small>
+                        </small>}
                   </div>
                 </div>
               
@@ -495,7 +496,7 @@ export function AddLocation(props: AddLocationProps) {
                       type="number"
                       isReadOnly={isLoading}
                       classNames={{
-                          inputWrapper: `${createLocationRequestDataError.quantity && active && 'border border-red-600'}`
+                          inputWrapper: `${createLocationRequestDataError?.quantity && active && 'border border-red-600'}`
                       }}
                       onChange={(e)=>{
                           handleOnchange(
@@ -512,7 +513,7 @@ export function AddLocation(props: AddLocationProps) {
                       type="number"
                       isReadOnly={isLoading}
                       classNames={{
-                          inputWrapper: `${createLocationRequestDataError.price && active && 'border border-red-600'}`
+                          inputWrapper: `${createLocationRequestDataError?.price && active && 'border border-red-600'}`
                       }}
                       onChange={(e)=>{
                           handleOnchange(
@@ -529,7 +530,7 @@ export function AddLocation(props: AddLocationProps) {
                       type="number"
                       isReadOnly={isLoading}
                       classNames={{
-                          inputWrapper: `${createLocationRequestDataError.hours && active && 'border border-red-600'}`
+                          inputWrapper: `${createLocationRequestDataError?.hours && active && 'border border-red-600'}`
                       }}
                       onChange={(e)=>{
                           handleOnchange(

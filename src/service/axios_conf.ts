@@ -16,6 +16,8 @@ import { LocalStorageService } from "./local_storage";
   // Add a request interceptor
   axiosInstance.interceptors.request.use(
     config => {
+      console.log('url = ',config.url);
+      
       // Perform actions before the request is sent
       if(!config.url?.includes('login') || !config.url?.includes('register')){
         config.headers.Authorization = `Bearer ${LocalStorageService.getItem(LocalStoragekey.BEARER_TOKEN)}`;

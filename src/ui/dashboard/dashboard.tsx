@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+    import React, { useEffect, useState } from "react";
 import {Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, Button, Input} from "@nextui-org/react";
 
 import appLogo from '../../assets/COUNTED Logo 1.svg';
@@ -18,12 +18,15 @@ import { LocalStoragekey } from "../../_constants/enums";
 
 export const Dashboard = ()=> {
     const navigate = useNavigate();
+    
+    const [addressId, setAddressId] = useState<number>();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
     const [isAddLocationOpen, setIsAddLocationOpen] = useState(false);
     const [isViewLocationOpen, setIsViewLocationOpen] = useState(false);
     const [isViewJobList, setIsViewJobList] = useState(false);
     const [viewEmployee, setViewEmployee] = useState(false);
+    
 
     const [dashboardData, setDashboardData] = useState<DashboardData>({});
     const [locationDataList, setLocationDataList] = useState<LocationData[]>([]);
@@ -51,7 +54,10 @@ export const Dashboard = ()=> {
         },
         {
             icon: <BookIcon width="20" height="20"/>,
-            onclick: ()=>{}
+            onclick: ()=>{
+                setIsMenuOpen(false);
+                setIsViewJobList(true);
+            }
         },
         {
             icon: <MessageIcon width="20" height="20"/>,
@@ -69,6 +75,10 @@ export const Dashboard = ()=> {
             const data = DashboardDataConvert.toDashboardData(JSON.stringify(response.data.data));
             setDashboardData(data)
         }).catch((e) => e)
+    }
+
+    async function handleViewEmployee(address_id:string) {
+        
     }
     
     async function fetchLocationData () {
@@ -133,30 +143,18 @@ export const Dashboard = ()=> {
                     </NavbarContent>
 
                     <NavbarContent className="hidden sm:flex gap-4" justify="start">
-                        
-                        <NavbarItem>
-                            <Button isIconOnly onClick={()=>{setIsAddLocationOpen(true)}} className="bg-[#4269E1] rounded-md">
-                                <MapIcon width="20" height="20"/>
-                            </Button>
-                        </NavbarItem>
-                        
-                        <NavbarItem>
-                            <Button isIconOnly className="bg-[#4269E1] rounded-md">
-                                <BookIcon width="20" height="20"/>
-                            </Button>
-                        </NavbarItem>
 
-                        <NavbarItem>
-                            <Button isIconOnly onPress={handleMessagePress} className="bg-[#4269E1] rounded-md">
-                                <MessageIcon width="20" height="20"/>
-                            </Button>
-                        </NavbarItem>
-
-                        <NavbarItem>
-                            <Button isIconOnly className="bg-[#4269E1] rounded-md">
-                                <SettingsIcon width="20" height="20"/>
-                            </Button>
-                        </NavbarItem>
+                        {
+                            menu.map((e) =>{
+                                return  <NavbarItem>
+                                    <Button isIconOnly onClick={e.onclick} className="bg-[#4269E1] rounded-md">
+                                        {e.icon}
+                                    </Button>
+                                </NavbarItem>
+                            })
+                        }
+                        
+                        
 
 
                         <NavbarItem>
@@ -208,7 +206,7 @@ export const Dashboard = ()=> {
                     multiColor={["bg-[#CB42E1]", "bg-[#E19842]" ]} />
                 </div>
             </div>
-            <div className="sm:flex gap-4 p-4 max-w-[80em] justify-between flex-wrap mx-auto">
+            <div className="sm:flex gap-4 p-4 max-w-[80em] justify-betwee flex-wrap mx-auto">
                 {
                     locationDataList.map((location)=> {
                         return <DashboardAddressCard 
@@ -217,7 +215,12 @@ export const Dashboard = ()=> {
                         onMaterialsClick={()=>{
                             handleMaterialPress(location.id)
                         }} 
-                        onEyeClick={()=>{setViewEmployee(true)}}
+                        onEyeClick={()=>{
+                            setAddressId(location.id);
+                            console.log({addressId});
+                            
+                            setViewEmployee(true);
+                        }}
                         onPress={()=>{
                             setJobData(jobDataList.filter((job) => job.id == location.job_title_id)[0]);
                             setLocationData(location);
@@ -228,7 +231,8 @@ export const Dashboard = ()=> {
             </div>
         </div>
 
-        <ViewEmployees isOpen={viewEmployee} onClose={()=>{setViewEmployee(false)}}/>
+        {viewEmployee && <ViewEmployees addressId={addressId}  isOpen={viewEmployee} onClose={()=>{setViewEmployee(false)}}/>}
+        
         
         {isAddLocationOpen && <AddLocation 
             isOpen={isAddLocationOpen} 
@@ -240,7 +244,10 @@ export const Dashboard = ()=> {
             isOpen={isViewLocationOpen}  
             jobTitle={jobData.name ?? ''}
             onClose={()=>{setIsViewLocationOpen(false)}} />
-        <JobList isOpen={isViewJobList}  onClose={()=>{setIsViewJobList(false)}} />
+        {isViewJobList && <JobList 
+            jobList={jobDataList} 
+            isOpen={isViewJobList}  
+            onClose={()=>{setIsViewJobList(false)}} />}
     </>);
 }
 

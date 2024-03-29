@@ -137,31 +137,31 @@ export class JobDataConvert {
 //   const createLocationRequest = Convert.toCreateLocationRequest(json);
 
 export interface CreateLocationRequest {
-    address:      string;
-    latitude:     number | string;
-    longitude:    number | string;
-    radius:       number | string;
-    price:        number | string;
-    quantity:     number | string;
-    hours:        number | string;
-    job_title_id: number | string;
-    start_date:   Date | string;
-    end_date:     Date | string;
-    memory:       Date | string;
-    breaks:       CreateLocationRequestBreak[];
-    timetable:    CreateLocationRequestTimetable[];
+    address?:      string;
+    latitude?:     number | string;
+    longitude?:    number | string;
+    radius?:       number | string;
+    price?:        number | string;
+    quantity?:     number | string;
+    hours?:        number | string;
+    job_title_id?: number | string;
+    start_date?:   Date | string;
+    end_date?:     Date | string;
+    memory?:       Date | string;
+    breaks?:       CreateLocationRequestBreak[];
+    timetable?:    CreateLocationRequestTimetable[];
 }
 
 export interface CreateLocationRequestBreak {
-    start: string;
-    end:   string;
-    day:   string;
+    start?: string;
+    end?:   string;
+    day?:   string;
 }
 export interface CreateLocationRequestTimetable {
-    start:  string;
-    end:    string;
-    day:    string;
-    status: any;
+    start?:  string;
+    end?:    string;
+    day?:    string;
+    status?: any;
 }
 
 // Converts JSON strings to/from your types
