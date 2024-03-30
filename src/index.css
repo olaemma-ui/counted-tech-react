@@ -16,6 +16,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+input[type="file"]::-webkit-file-upload-button {
+  display: none;
+}
+input[type="file"]::file-selector-button {
+  display: none;
+}
 
 a {
   font-weight: 500;

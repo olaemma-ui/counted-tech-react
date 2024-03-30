@@ -84,6 +84,23 @@ export interface Todo {
     updated_at?: Date;
 }
 
+// To parse this data:
+//
+//   import { Convert, TodoImage } from "./file";
+//
+//   const todoImage = Convert.toTodoImage(json);
+
+export interface TodoImage {
+    id?:         number;
+    todo_id?:    number;
+    user_id?:    number;
+    image?:      string;
+    updated_at?: Date;
+    created_at?: Date;
+    user?:       User;
+}
+
+
 // Converts JSON strings to/from your types
 export class TodoConvert {
     public static toTodo(json: string): Todo {
@@ -91,6 +108,14 @@ export class TodoConvert {
     }
 
     public static todoToJson(value: Todo): string {
+        return JSON.stringify(value);
+    }
+
+    public static toTodoImage(json: string): TodoImage {
+        return JSON.parse(json);
+    }
+
+    public static todoImageToJson(value: TodoImage): string {
         return JSON.stringify(value);
     }
 }

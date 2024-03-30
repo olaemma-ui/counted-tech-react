@@ -13,13 +13,16 @@ import { LocalStoragekey } from "../../_constants/enums";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import { dateDiff } from "../../urils/utils";
 import ConfirmDialog from "../dashboard/dialogs/confirm_dialog";
+import { useNavigate } from "react-router-dom";
 
 
 export const EmployeeDetails = ()=>{
 
+    const navigate = useNavigate();
+
     
     const [isLoading, setIsLoading] = useState(true);
-    const [isDeleting, setIsDeleting] = useState(true);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [updatingMinimize, setUpdatingMinimize] = useState(false);
     const [updatingMap, setUpdatingMap] = useState(false);
     const [fetching, setFetching] = useState(false);
@@ -49,6 +52,29 @@ export const EmployeeDetails = ()=>{
 
     
     async function fetchEmployeeDetails () {
+        setFetching(true);
+        const employeeId = LocalStorageService.getItem(LocalStoragekey.CURRECNT_EMPLOYEE_ID);
+        await axiosInstance.get(`company/employee-detail/${employeeId}`)
+        .then((response) => {
+            let data = response.data.data;
+            data = Convert.toEmployeeData(JSON.stringify(data));
+            setEmployeeDetails(data);
+        }).catch((e) => e)
+        setFetching(false);
+    }
+
+    async function deleteEmployee () {
+        setIsDeleting(true);
+        const employeeId = LocalStorageService.getItem(LocalStoragekey.CURRECNT_EMPLOYEE_ID);
+        await axiosInstance.get(`company/delete-employee/${employeeId}`)
+        .then((response) => {
+            navigate('/dashboard');
+        }).catch((e) => e)
+        setIsDeleting(false);
+    }
+    
+    
+    async function updateEmployee () {
         setFetching(true);
         const employeeId = LocalStorageService.getItem(LocalStoragekey.CURRECNT_EMPLOYEE_ID);
         await axiosInstance.get(`company/employee-detail/${employeeId}`)
@@ -164,11 +190,11 @@ export const EmployeeDetails = ()=>{
            <div className="sm:flex gap-8 sm:my-0 my-5 sm:p-8 p-4 m-4 w-full sm:h-[80vh] h-full overflow-auto">
                 <div className="content min-w-[20em] overflow-y-auto h-full rounded-xl bg-white p-4">
                     <div className="left flex gap-2 w-full">               
-                        <Button
+                        {/* <Button
                             isIconOnly
                             className="rounded-md bg-[#273B4A]">
                             <SwapIcon/>
-                        </Button>
+                        </Button> */}
 
                         <Button
                             isIconOnly
@@ -200,7 +226,7 @@ export const EmployeeDetails = ()=>{
                             radius="sm" 
                             // name={employeeDetails?.name}
                             className="w-[7em] h-[6em]"
-                            src={employeeDetails?.image ?? ''} />
+                            src={employeeDetails?.image && `${import.meta.env.VITE_COUNTEDT_TECH_COMPANY_IMAGE_URL}${employeeDetails.image}`} />
 
                         <div className="flex flex-col w-full justify-end items-end gap-4 ">    
                             <Switch onChange={()=>{handleAllowMinimize()}} isSelected={employeeDetails?.employee?.allow_minimize == 1}>
@@ -442,7 +468,10 @@ export const EmployeeDetails = ()=>{
                         </Table>
                     </div>
                     
-                    <EditProfile isOpen={viewEmployee} onClose={()=>{setViewEmployee(false)}}/>
+                    {viewEmployee && <EditProfile
+                        employeeData={employeeDetails}
+                        isOpen={viewEmployee} 
+                        onClose={()=>{setViewEmployee(false)}}/>}
 
                     { confirmDialog.isOpen && <ConfirmDialog
                         icon={<>
@@ -462,7 +491,9 @@ export const EmployeeDetails = ()=>{
                             })
                         }}
                         isLoading={isDeleting}
-                        onYes={()=>{}}
+                        onYes={()=>{
+                            deleteEmployee();
+                        }}
                     />}
                 </div>
            </div>

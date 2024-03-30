@@ -107,6 +107,55 @@ export interface DurationObject {
 }
 
 
+// To parse this data:
+//
+//   import { Convert, MessageBody } from "./file";
+//
+//   const message = Convert.toMessageBody(json);
+
+export interface MessageBody {
+    id?:           number;
+    sender_id?:    number;
+    recipient_id?: number;
+    content?:      string;
+    image?:        null;
+    is_read?:      number;
+    created_at?:   Date;
+    updated_at?:   Date;
+    sender?:       Recipient;
+    recipient?:    Recipient;
+}
+
+export interface Recipient {
+    id?:                number;
+    name?:              string;
+    surname?:           string;
+    email?:             null | string;
+    phone?:             string;
+    image?:             string;
+    enable_2fa?:        boolean;
+    auth_code?:         null;
+    role_id?:           number;
+    company_id?:        string;
+    is_archive?:        number;
+    email_verified_at?: null;
+    created_at?:        Date;
+    updated_at?:        Date;
+}
+
+// To parse this data:
+//
+//   import { Convert, MessageRequest } from "./file";
+//
+//   const messageRequest = Convert.toMessageRequest(json);
+
+export interface MessageRequest {
+    content?:      string;
+    image?:        File;
+    recipient_id?: string;
+}
+
+
 // Converts JSON strings to/from your types
 export class Convert {
     public static toEmployeeData(json: string): EmployeeData {
@@ -154,6 +203,22 @@ export class Convert {
     }
 
     public static durationObjectToJson(value: { [key: string]: DurationObject }): string {
+        return JSON.stringify(value);
+    }
+
+    public static toMessageBody(json: string): MessageBody {
+        return JSON.parse(json);
+    }
+
+    public static messageToJson(value: MessageBody): string {
+        return JSON.stringify(value);
+    }
+
+    public static toMessageRequest(json: string): MessageRequest {
+        return JSON.parse(json);
+    }
+
+    public static messageRequestToJson(value: MessageRequest): string {
         return JSON.stringify(value);
     }
 }

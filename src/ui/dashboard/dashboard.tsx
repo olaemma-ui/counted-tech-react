@@ -40,6 +40,11 @@ export const Dashboard = ()=> {
         navigate('/dashboard/materials');
     }
 
+    function handleTodoPress(id: any) {
+        LocalStorageService.setItem(LocalStoragekey.ADDRESS_ID, id);
+        navigate('/dashboard/todo');
+    }
+
     function handleMessagePress() {
         navigate('/dashboard/chat');
     }
@@ -77,10 +82,6 @@ export const Dashboard = ()=> {
         }).catch((e) => e)
     }
 
-    async function handleViewEmployee(address_id:string) {
-        
-    }
-    
     async function fetchLocationData () {
         await axiosInstance.get('company/location')
         .then((response) => {
@@ -212,6 +213,9 @@ export const Dashboard = ()=> {
                         return <DashboardAddressCard 
                         key={1000 + Math.random() + 9999}
                         locationData={location}
+                        onSyncClick={()=>{
+                            handleTodoPress(location.id)
+                        }}
                         onMaterialsClick={()=>{
                             handleMaterialPress(location.id)
                         }} 

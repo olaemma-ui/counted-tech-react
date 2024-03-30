@@ -1,23 +1,29 @@
-import { Avatar, Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue, Spinner, Checkbox, Textarea } from "@nextui-org/react";
-import { ArrowDownIcon, ArrowUpIcon, CheckIcon, EraserIcon, MapPinIcon, PencilIcon, SwapIcon, TrashIcon, UploadImageIcon } from "../../_components/svg_components";
-import {useAsyncList} from "@react-stately/data";
+import { Avatar, Button, Spinner, Textarea } from "@nextui-org/react";
+import { ArrowUpIcon, UploadImageIcon } from "../../_components/svg_components";
 
 
 import '../style/dashboard.css'
-import React, { useEffect, useState } from "react";
-import { EditProfile } from "../dashboard/dialogs/edit_profile";
-import { DahsboardLayout } from "../dashboard/layout/dashboard_layout";
-import { Convert, EmployeeData } from "../../interface/response/dto";
+import { useEffect, useRef, useState } from "react";
+import { Convert, EmployeeData, MessageBody, MessageRequest } from "../../interface/response/dto";
 import { axiosInstance } from "../../service/axios_conf";
+import { toFormData } from "axios";
+import { toast, Bounce, ToastContainer } from "react-toastify";
 
 
 export const Chat = ()=>{
 
-    
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingMessage, setIsLoadingMessage] = useState(true);
     const [chatList, setChatList] = useState<EmployeeData[]>();
+    const [selectedChat, setSelectedChat] = useState<EmployeeData>();
+    const [messageBody, setMessageBody] = useState<MessageBody[]>();
+    const [messageListener, setMessageListener] = useState<string>();
+    const [sendMessageLoading, setSendMessageLoading] = useState<boolean>();
+
+    const [messageRequest, setMessageRequest] = useState<MessageRequest>();
     
     async function fetChatList () {
+        setIsLoading(true)
         await axiosInstance.get('company/chat-list')
         .then((response) => {
             const data = response.data.data;
@@ -31,23 +37,119 @@ export const Chat = ()=>{
             });
             setChatList(list);
         })
+        setIsLoading(false)
+
     }
 
+    
+    const divRef = useRef(null);
+
+    
+    async function fetChatDetails () {
+        setIsLoadingMessage(true)
+        await axiosInstance.get(`company/chat/${empId}`)
+        .then((response) => {
+            const data = response.data.data;
+            const list : MessageBody[] = [];
+
+            console.log({data});
+            
+
+            data.forEach((element : any) => {
+                list.push(Convert.toMessageBody(JSON.stringify(element)))
+            });
+            setMessageBody(list);
+            console.log(divRef.current.scrollHeight);
+            
+            if(messageBody.length > 0){
+                  
+            divRef.current.scroll({ 
+                top: divRef.current.scrollHeight, 
+                behavior: 'smooth' 
+            });
+            }
+        })
+        setIsLoadingMessage(false)
+    }
+    
+    async function handleSendMessage () {
+        // setEmployeeId(id)
+        // setEmployeeId(id)
+        console.log({
+            ...messageRequest,
+            recipient_id: selectedChat.id,
+        });
+        
+        await axiosInstance.post(`company/chat`, toFormData({
+            ...messageRequest,
+            recipient_id: selectedChat.id,
+        }))
+        .then((response) => {
+            setMessageRequest({
+                content: '',
+                image: null,
+                recipient_id: ''
+            })
+            toast.success(response.data.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+            });
+            fetChatDetails();
+        })
+    }
+
+    const [image, setImage] = useState(null)
+
+    const onImageChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            setImage(URL.createObjectURL(event.target.files[0]));
+        }
+    }
 
     useEffect(() => {
       fetChatList()
     }, [])
     
-    
+
 
     return (<>
-        <DahsboardLayout>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+        />
             <div className="py-5  h-[100dvh] flex items-center justify-center bg-[#F4F4F4]">
                 <div className="sm:flex gap-8 sm:my-0 my-5 sm:p-8 p-4 m-4 w-full h-full overflow-auto">
                     <div className="w-full max-w-[18em] flex flex-col gap-2 mb-5">
+                            {chatList?.length == 0 && !isLoading && <p className="text-black">
+                                No Chat / Messages    
+                            </p>}
+                            {isLoading && <p className="text-black">
+                                Loading Chat List <Spinner size='sm'/>
+                            </p>}
                             {
-                                chatList.map((chat) =>{
-                                    return <Button className="justify-start flex gap-6 items-center card rounded-xl bg-white p-4 shadow-lg h-fit">
+                                chatList?.map((chat) =>{
+                                    return <Button 
+                                        onPress={(e)=>{
+                                            setMessageBody([]);
+                                            setSelectedChat(chat);
+                                            fetChatDetails();
+                                        }}
+                                        className="justify-start flex gap-6 items-center card rounded-xl bg-white p-4 shadow-lg h-fit">
                                         <Avatar 
                                             className="w-[3em] h-[3em] cursor-pointer" 
                                             color="danger" 
@@ -60,9 +162,6 @@ export const Chat = ()=>{
                                                     {chat.surname}
                                                     {chat.name}
                                                 </p>
-                                                {/* <p className="text-gray-700 text-xs text-left">
-                                                    New Message from....
-                                                </p> */}
                                             </div>
                                             
                                     </Button>
@@ -72,41 +171,41 @@ export const Chat = ()=>{
 
                     <div className="w-full">
                         <div className="bg-white rounded-lg shadow-lg flex gap-4 items-center justify-center h-[4.7em]">
-                            <Avatar 
-                                className="w-[3em] h-[3em] cursor-pointer" 
-                                color="danger" 
-                                isBordered  
-                                src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
+                           {selectedChat && <>
+                                <Avatar 
+                                    className="w-[3em] h-[3em] cursor-pointer" 
+                                    color="danger" 
+                                    isBordered  
+                                    src={`${import.meta.env.VITE_COUNTEDT_TECH_COMPANY_IMAGE_URL}${selectedChat.image}`} />
 
 
                                 <div className="left">
                                     <p className="text-black text-lg text-left">
-                                        David Kumar
+                                        {selectedChat.surname} {selectedChat.name}
                                     </p>
                                 </div>
+                           </>}
                         </div>
 
-                        <div className="h-[75dvh] w-full  my-5 overflow-auto">
-                            <Message isSender={false}/>
-                            <Message isSender={true}/>
-                            <Message isSender={false}/>
-                            <Message isSender={true}/>
-                            <Message isSender={false}/>
-                            <Message isSender={true}/>
-                            <Message isSender={false}/>
-                            <Message isSender={true}/>
-                            <Message isSender={false}/>
-                            <Message isSender={true}/>
-                            <Message isSender={false}/>
-                            <Message isSender={true}/>
-                            <Message isSender={false}/>
-                            <Message isSender={true}/>
-                            <Message isSender={false}/>
-                            <Message isSender={true}/>
-                            <Message isSender={false}/>
-                            <Message isSender={true}/>
+                        <div className="h-[68dvh] w-full  my-5 overflow-auto">
+                         
+
+                           {<div ref={divRef}>
+                                {messageBody?.map((message) => <Message 
+                                    date={message.created_at}
+                                    image={message.image}
+                                    message={message.content}
+                                    isSender={message.sender_id != selectedChat?.id}/>
+                                    )}
+                                {isLoadingMessage && <Spinner size='sm'/>}
+                            </div>}
+
+                            <div id="bottom"/>
                         </div>
 
+                        {image && <div className="p-2 rounded bg-white shadow-lg">
+                            <img src={image} alt="" className="w-[10em] h-[10em] rounded" />
+                        </div>}
                         <div className="text-box flex gap-4">
                         <Textarea
                             isRequired
@@ -115,39 +214,56 @@ export const Chat = ()=>{
                             maxRows={2}
                             radius="lg"
                             className="w-full shadow-lg"
-                            />
-                            <Button 
-                                isIconOnly
-                                className="bg-[#4269E1]">
-                                <ArrowUpIcon/>
-                            </Button>
+                            value={messageRequest?.content}
+                            onChange={(e) => {
+                                setMessageRequest({
+                                    ...messageRequest,
+                                    content: e.target.value,
+                                })
+                            }}/>
 
                             <Button 
                                 isIconOnly
-                                className="bg-[#ADA70E]">
-                                <UploadImageIcon/>
+                                onPress={handleSendMessage}
+                                isLoading={sendMessageLoading}
+                                className="bg-[#4269E1] mt-3">
+                                <ArrowUpIcon/>
                             </Button>
+
+                            <label htmlFor="image" className="w-fit h-fit bg-[#ADA70E] p-2 rounded-xl mt-3 cursor-pointer">
+                               <input type="file" className="invisible hidden" id="image" 
+                                   onChange={(e) => {
+                                       setMessageRequest({
+                                           ...messageRequest,
+                                           image: e.target.files[0],
+                                       })
+                                       onImageChange(e);}} />
+                                       <UploadImageIcon/>
+                           </label>
                         </div>
                     </div>
                 </div>
             </div>
-        </DahsboardLayout>
     </>);
 }
 
 
 interface MessageProps {
-    isSender: boolean
+    isSender?: boolean,
+    message?: string,
+    image?: string,
+    date?: Date,
 }
 
 export const Message = (props: MessageProps)=>{
     return (<>
         <div className={`rounded-2xl text-[.8em] p-4 text-white ${props.isSender ? 'bg-[#7D7AFF] ml-auto' : 'bg-[#4269E1]'} my-5 text-left shadow-xl  min-h-[4em] h-fit w-full max-w-[65%]`}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            Sunt doloremque amet provident esse excepturi deserunt pariatur harum, nulla, 
-            repellat ducimus mollitia commodi officiis. Eaque obcaecati blanditiis facere excepturi nemo nam?
-
-            <p className="text-[.7em] text-gray-300 text-right mt-3">04-08-2024</p>
+            {props.image && <img 
+                src={`${import.meta.env.VITE_COUNTEDT_TECH_COMPANY_IMAGE_URL}${props.image}`}
+                className="w-full h-[full] mb-4 rounded-xl" 
+                alt="" />}
+            {props.message ?? ''}
+            <p className="text-[.7em] text-gray-300 text-right mt-3">{new Date(props.date).toLocaleDateString()} {new Date(props.date).toLocaleTimeString()}</p>
         </div>
     </>);
 }

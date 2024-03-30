@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Checkbox, Input, Link, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Divider} from "@nextui-org/react";
 import { ArrowDownIcon } from "../../../_components/svg_components";
+import { Employee, EmployeeData } from "../../../interface/response/dto";
 
 
 interface EditProfileProps{
     onClose?: () => void,
     isOpen: boolean,
+    employeeData: EmployeeData,
 }
 
 export function EditProfile(props: EditProfileProps) {
@@ -21,6 +23,8 @@ export function EditProfile(props: EditProfileProps) {
     [selectedKeys]
   );
 
+
+  const [employeeData, setEmployeeData] = useState<EmployeeData>(props.employeeData);
   
 
 
@@ -48,6 +52,7 @@ export function EditProfile(props: EditProfileProps) {
                     label="Vorname"
                     variant="flat"
                     type="text"
+                    value={employeeData?.name}
                     className="shadow-md rounded-xl mb-3"
                   />
 
@@ -55,6 +60,7 @@ export function EditProfile(props: EditProfileProps) {
                     label="Nachname"
                     variant="flat"
                     type="text"
+                    value={employeeData?.surname}
                     className="shadow-md rounded-xl mb-3"
                     // endContent={}
                   />
@@ -63,6 +69,7 @@ export function EditProfile(props: EditProfileProps) {
                     label="Telefonnumer"
                     variant="flat"
                     type="text"
+                    value={employeeData?.phone}
                     className="shadow-md rounded-xl mb-3"
                   />
 
@@ -70,6 +77,7 @@ export function EditProfile(props: EditProfileProps) {
                     label="Personalnummer"
                     variant="flat"
                     type="number"
+                    value={employeeData?.employee?.personal_number}
                     className="shadow-md rounded-xl mb-3"
                     // endContent={}
                   />
