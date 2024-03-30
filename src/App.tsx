@@ -13,6 +13,7 @@ import { MaterialsPage } from "./ui/material/material";
 import { EmployeeDetails } from "./ui/employee/view_employee";
 import { Chat } from "./ui/chat/chat";
 import { DahsboardLayout } from "./ui/dashboard/layout/dashboard_layout";
+import { TodoListPage } from "./ui/todo_list/todo_list";
 
 function App() {
 
@@ -64,6 +65,12 @@ function App() {
               <Route path={"chat"} element={
                 <ProptectedRoute>
                   <Chat/>
+                </ProptectedRoute>
+              } />
+
+              <Route path={"todo"} element={
+                <ProptectedRoute>
+                  <TodoListPage/>
                 </ProptectedRoute>
               } />
             </Route>

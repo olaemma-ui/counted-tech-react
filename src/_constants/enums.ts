@@ -6,4 +6,5 @@ export enum LocalStoragekey {
     USER_DATA,
     ADDRESS_DATA,
     ADDRESS_ID,
+    CURRECNT_EMPLOYEE_ID,
 }

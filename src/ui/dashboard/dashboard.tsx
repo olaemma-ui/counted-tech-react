@@ -217,8 +217,6 @@ export const Dashboard = ()=> {
                         }} 
                         onEyeClick={()=>{
                             setAddressId(location.id);
-                            console.log({addressId});
-                            
                             setViewEmployee(true);
                         }}
                         onPress={()=>{

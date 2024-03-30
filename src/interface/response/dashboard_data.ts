@@ -51,8 +51,8 @@ export interface LocationData {
     total_absent_employees?:   number;
     total_vacation_employees?: number;
     total_timer_count?:        string;
-    timetable?:                Timetable[];
     calculator?:               Calculator;
+    timetable?:                Timetable[];
     breaks?:                   Break[];
 }
 

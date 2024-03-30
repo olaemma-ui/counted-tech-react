@@ -56,7 +56,7 @@ export function DashboardAddressCard(props: DashboardAdressCardProps) {
     (props?.locationData?.calculator?.hours ?? 0)) - 
     (Number.parseInt(props.locationData.total_timer_count ?? '0') / 3600);
   return (
-    <Button className="h-full sm:w-[21em]  p-0" onPress={props.onPress}>
+    <Button className="h-full max-w-[25em] sm:min-w-[20em]  p-0" onPress={props.onPress}>
         <Card className="w-full">
             <CardHeader className="flex  flex-wra gap-3">
                 <div className="flex gap-3">

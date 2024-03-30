@@ -119,6 +119,10 @@ export const Login = ()=>{
 
                     <Link to="" className="text-black mb-5 mt-3 block w-full text-right"> Passwort vergessen </Link>
                     <Button onPress={handleOnSubmit} isLoading={isLoading} className="bg-black block w-full text-white h-[50px]"> Anmelden </Button>
+                    <div className="flex">
+                        <p className="text-black"> Noch keinen Account?  </p>
+                        <Link to="/register" className="text-black mb-5 mt-3 block w-full text-right"> Registriere dich hier.</Link>
+                    </div>
                 </div>
             </AuthenticationLayout>
         </>

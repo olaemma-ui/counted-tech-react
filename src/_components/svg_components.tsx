@@ -471,3 +471,26 @@ export function CheckedSuccessSvg(props: SvgProps) {
     </svg>
   );
 }
+
+export function DownloadIcon(props: SvgProps) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="32"
+      height="32"
+      fill="none"
+      viewBox="0 0 32 32"
+      {...props}
+    >
+      <path
+        fill="#fff"
+        d="M16 18.668l-.707.707.707.707.707-.707-.707-.707zm1-12a1 1 0 10-2 0h2zm-8.374 6.04l6.667 6.667 1.414-1.414-6.667-6.667-1.414 1.414zm8.08 6.667l6.668-6.667-1.415-1.414-6.666 6.667 1.414 1.414zm.294-.707v-12h-2v12h2z"
+      ></path>
+      <path
+        stroke="#fff"
+        strokeWidth="2"
+        d="M6.667 21.332v1.333a2.667 2.667 0 002.667 2.667h13.333a2.667 2.667 0 002.667-2.667v-1.333"
+      ></path>
+    </svg>
+  );
+}

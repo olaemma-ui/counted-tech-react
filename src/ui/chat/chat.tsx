@@ -4,15 +4,40 @@ import {useAsyncList} from "@react-stately/data";
 
 
 import '../style/dashboard.css'
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { EditProfile } from "../dashboard/dialogs/edit_profile";
 import { DahsboardLayout } from "../dashboard/layout/dashboard_layout";
+import { Convert, EmployeeData } from "../../interface/response/dto";
+import { axiosInstance } from "../../service/axios_conf";
 
 
 export const Chat = ()=>{
 
     
-    const [isLoading, setIsLoading] = React.useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [chatList, setChatList] = useState<EmployeeData[]>();
+    
+    async function fetChatList () {
+        await axiosInstance.get('company/chat-list')
+        .then((response) => {
+            const data = response.data.data;
+            const list : EmployeeData[] = [];
+
+            console.log({data});
+            
+
+            data.forEach((element : any) => {
+                list.push(Convert.toEmployeeData(JSON.stringify(element)))
+            });
+            setChatList(list);
+        })
+    }
+
+
+    useEffect(() => {
+      fetChatList()
+    }, [])
+    
     
 
     return (<>
@@ -20,24 +45,29 @@ export const Chat = ()=>{
             <div className="py-5  h-[100dvh] flex items-center justify-center bg-[#F4F4F4]">
                 <div className="sm:flex gap-8 sm:my-0 my-5 sm:p-8 p-4 m-4 w-full h-full overflow-auto">
                     <div className="w-full max-w-[18em] flex flex-col gap-2 mb-5">
-                            <Button className="justify-start flex gap-6 items-center card rounded-xl bg-white p-4 shadow-lg h-fit">
-                                <Avatar 
-                                    className="w-[3em] h-[3em] cursor-pointer" 
-                                    color="danger" 
-                                    isBordered  
-                                    src="https://i.pravatar.cc/150?u=a04258114e29026702d" />
-
-
-                                    <div className="left">
-                                        <p className="text-black text-lg">
-                                            David Kumar
-                                        </p>
-                                        <p className="text-gray-700 text-xs text-left">
-                                            New Message from....
-                                        </p>
-                                    </div>
-                                    
-                            </Button>
+                            {
+                                chatList.map((chat) =>{
+                                    return <Button className="justify-start flex gap-6 items-center card rounded-xl bg-white p-4 shadow-lg h-fit">
+                                        <Avatar 
+                                            className="w-[3em] h-[3em] cursor-pointer" 
+                                            color="danger" 
+                                            isBordered  
+                                            src={`${import.meta.env.VITE_COUNTEDT_TECH_COMPANY_IMAGE_URL}${chat.image}`} />
+        
+        
+                                            <div className="left">
+                                                <p className="text-black text-lg">
+                                                    {chat.surname}
+                                                    {chat.name}
+                                                </p>
+                                                {/* <p className="text-gray-700 text-xs text-left">
+                                                    New Message from....
+                                                </p> */}
+                                            </div>
+                                            
+                                    </Button>
+                                })
+                            }
                     </div>
 
                     <div className="w-full">

@@ -4,6 +4,8 @@
 //
 //   const employeeData = Convert.toEmployeeData(json);
 
+import { Break, Timetable } from "./dashboard_data";
+
 export interface EmployeeData {
     id?:                number;
     name?:              string;
@@ -21,6 +23,8 @@ export interface EmployeeData {
     updated_at?:        Date;
     role?:              Role;
     employee?:          Employee;
+    timetable?:         Timetable[];
+    breaks?:            Break[];
 }
 
 export interface Employee {
@@ -32,6 +36,7 @@ export interface Employee {
     allow_minimize?:     number;
     company_id?:         number;
     job_title_id?:       number;
+    job_title?:          string;
     remaining_vacation?: number;
     total_vacation?:     number;
     license?:            string;
@@ -39,6 +44,8 @@ export interface Employee {
     created_at?:         null;
     updated_at?:         Date;
     address?:            Address;
+    company?:            Company;
+
 }
 
 export interface Address {
@@ -64,6 +71,41 @@ export interface Role {
     created_at?: null;
     updated_at?: null;
 }
+
+export interface Company {
+    id?:              number;
+    user_id?:         number;
+    code?:            string;
+    package_id?:      number;
+    company_name?:    string;
+    contact_person?:  string;
+    logo?:            string;
+    street?:          string;
+    zipcode?:         string;
+    location?:        string;
+    created_at?:      Date;
+    updated_at?:      Date;
+    state_id?:        number;
+    status?:          number;
+    legal_entity_id?: number;
+}
+
+// To parse this data:
+//
+//   import { Convert } from "./file";
+//
+//   const durationObject = Convert.toDurationObject(json);
+
+export interface DurationObject {
+    total_duration?: number;
+    start_time?:     Date | null;
+    end_time?:       Date | null;
+    address?:        null | string;
+    is_absent?:      boolean;
+    is_on_vacation?: boolean;
+    day?:            Date;
+}
+
 
 // Converts JSON strings to/from your types
 export class Convert {
@@ -96,6 +138,22 @@ export class Convert {
     }
 
     public static roleToJson(value: Role): string {
+        return JSON.stringify(value);
+    }
+
+    public static toCompany(json: string): Company {
+        return JSON.parse(json);
+    }
+
+    public static companyToJson(value: Company): string {
+        return JSON.stringify(value);
+    }
+
+    public static toDurationObject(json: string): { [key: string]: DurationObject } {
+        return JSON.parse(json);
+    }
+
+    public static durationObjectToJson(value: { [key: string]: DurationObject }): string {
         return JSON.stringify(value);
     }
 }

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "../../../service/axios_conf";
 import { useEffect, useState } from "react";
 import { Convert, EmployeeData } from "../../../interface/response/dto";
+import { LocalStorageService } from "../../../service/local_storage";
+import { LocalStoragekey } from "../../../_constants/enums";
 
 interface ViewEmployeesProps{
     onClose?: () => void,
@@ -43,6 +45,12 @@ export function ViewEmployees(props: ViewEmployeesProps) {
   useEffect(() => {    
     fetchLocationEMployee();
   }, [])
+
+
+  function handleViewEmployee(employeeId: number){
+    LocalStorageService.setItem(LocalStoragekey.CURRECNT_EMPLOYEE_ID, employeeId);
+    navigate('/dashboard/employee');
+  }
   
 
   return (
@@ -75,10 +83,12 @@ export function ViewEmployees(props: ViewEmployeesProps) {
                        {employeeList?.map((employee) =>  
                         <Avatar 
                             className="w-[4em] h-[4em] cursor-pointer" 
-                            color="danger" 
-                            onClick={()=> {navigate('/dashboard/employee')}}
+                            color={`${employee?.employee?.status === '0' ? 'danger' : 'success'}`} 
+                            onClick={()=> {
+                              handleViewEmployee(employee.id);
+                            }}
                             isBordered  
-                            src={employee.image} />
+                            src={employee.image && `${import.meta.env.VITE_COUNTEDT_TECH_COMPANY_IMAGE_URL}${employee.image}`} />
                           )}
                         
                    </div>
