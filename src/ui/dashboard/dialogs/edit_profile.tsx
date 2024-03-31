@@ -85,7 +85,8 @@ export function EditProfile(props: EditProfileProps) {
 
                   <p className=" text-black">Führerschein </p>
                   <div className="flex gap-8">
-                    <div className="w-full shadow-md rounded-xl cursor-pointer text-black flex items-center justify-center  bg-white h-[3em] border border-[#2E4BA4]">
+                    <div 
+                      className="w-full shadow-md rounded-xl cursor-pointer text-black flex items-center justify-center  bg-white h-[3em] border ">
                       Ja
                     </div>
                     <div className="w-full bg-white h-[3em] cursor-pointer shadow-md text-black flex items-center justify-center rounded-xl border">

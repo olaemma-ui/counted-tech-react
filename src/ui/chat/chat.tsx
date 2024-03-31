@@ -45,9 +45,9 @@ export const Chat = ()=>{
     const divRef = useRef(null);
 
     
-    async function fetChatDetails () {
+    async function fetChatDetails (id: number) {
         setIsLoadingMessage(true)
-        await axiosInstance.get(`company/chat/${empId}`)
+        await axiosInstance.get(`company/chat/${id}`)
         .then((response) => {
             const data = response.data.data;
             const list : MessageBody[] = [];
@@ -75,6 +75,7 @@ export const Chat = ()=>{
     async function handleSendMessage () {
         // setEmployeeId(id)
         // setEmployeeId(id)
+        setSendMessageLoading(true)
         console.log({
             ...messageRequest,
             recipient_id: selectedChat.id,
@@ -90,6 +91,7 @@ export const Chat = ()=>{
                 image: null,
                 recipient_id: ''
             })
+            setImage(null);
             toast.success(response.data.message, {
                 position: "top-right",
                 autoClose: 5000,
@@ -101,8 +103,10 @@ export const Chat = ()=>{
                 theme: "dark",
                 transition: Bounce,
             });
-            fetChatDetails();
+            setSendMessageLoading(false)
+            fetChatDetails(selectedChat.id);
         })
+        setSendMessageLoading(false)
     }
 
     const [image, setImage] = useState(null)
@@ -130,8 +134,8 @@ export const Chat = ()=>{
             pauseOnFocusLoss
             draggable
             pauseOnHover
-            theme="dark"
-        />
+            theme="dark"/>
+
             <div className="py-5  h-[100dvh] flex items-center justify-center bg-[#F4F4F4]">
                 <div className="sm:flex gap-8 sm:my-0 my-5 sm:p-8 p-4 m-4 w-full h-full overflow-auto">
                     <div className="w-full max-w-[18em] flex flex-col gap-2 mb-5">
@@ -147,7 +151,7 @@ export const Chat = ()=>{
                                         onPress={(e)=>{
                                             setMessageBody([]);
                                             setSelectedChat(chat);
-                                            fetChatDetails();
+                                            fetChatDetails(chat.id);
                                         }}
                                         className="justify-start flex gap-6 items-center card rounded-xl bg-white p-4 shadow-lg h-fit">
                                         <Avatar 
