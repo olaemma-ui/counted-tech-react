@@ -22,7 +22,9 @@ input[type="file"]::-webkit-file-upload-button {
 input[type="file"]::file-selector-button {
   display: none;
 }
-
+*{
+  color: #212529;
+}
 a {
   font-weight: 500;
   color: #646cff;

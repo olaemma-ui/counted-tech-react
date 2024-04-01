@@ -7,6 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { EmployerDetails } from "../dialogs/employer_details";
 import { EditEmployerProfile } from "../dialogs/edit_employer_profile";
 import ChangePassword from "../dialogs/change_password";
+import ImpersumDialog from "../dialogs/impersum";
+import AllgemeineuDialog from "../dialogs/allgemeine_dialog";
+import DateenschuDialog from "../dialogs/dateenschu_dialog";
+import { axiosInstance } from "../../service/axios_conf";
+import { toast, Bounce } from "react-toastify";
+import { LocalStorageService } from "../../service/local_storage";
 
 
 function SettingsPage() {
@@ -30,13 +36,43 @@ function SettingsPage() {
     const [viewProfile, setIsViewProfile] = useState<boolean>(false);
     const [changePassword, setChangePassword] = useState<boolean>(false);
     const [editProfile, setEditProfile] = useState<boolean>(false);
+    
+    const [impressumDialog, setImpressumDialog] = useState<boolean>(false);
+    const [allgemeine, setAllgemeine] = useState<boolean>(false);
+    const [dateenschu, setDateenschu] = useState<boolean>(false);
 
 
-    function handleDeleteJobTitle(): void {
-        throw new Error("Function not implemented.");
-    }
-
+    
     const navigate = useNavigate();
+
+      
+    async function onLogOut () {
+        setCofirmLogoutDialog({
+            ...confirmLogoutDialog,
+            isLoading: true,
+        });
+        await axiosInstance.get('auth/logout')
+        .then((response) => {
+            if(response.data.status){
+                toast.success(response.data.message, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                    transition: Bounce,
+                });
+                LocalStorageService.clear();
+            }
+        })
+        setCofirmLogoutDialog({
+            ...confirmLogoutDialog,
+            isLoading: true,
+        });
+    }
 
 
     function handlePackageClick() {
@@ -89,20 +125,33 @@ function SettingsPage() {
                     </Button>    
                 </div>
                 <div className="flex sm:flex-row flex-col gap-8 my-5">
-                    <Button className="bg-white h-[4em] w-full">
+                    <Button onPress={()=>{
+                        setAllgemeine(true);
+                    }} className="bg-white h-[4em] w-full">
                         Allgemeine Geschaftsbedingung      
                     </Button>    
 
-                    <Button className="bg-white h-[4em] w-full">
+                    <Button onPress={()=>{
+                        setDateenschu(true);
+                    }} className="bg-white h-[4em] w-full">
                         Datenschutzerklarung
                     </Button>    
                 </div>
                 <div className="flex sm:flex-row flex-col gap-8 my-5">
-                    <Button className="bg-white h-[4em] w-full">
+                    <Button onPress={()=>{
+                        setImpressumDialog(true);
+                    }} className="bg-white h-[4em] w-full">
                         Impressum 
                     </Button>    
 
-                    <Button className="bg-white h-[4em] w-full text-red-500">
+                    <Button onPress={()=>{
+                          setCofirmLogoutDialog({
+                            isNo: false,
+                            isYes: false,
+                            isOpen: true,
+                            isLoading: false,
+                        })
+                    }} className="bg-white h-[4em] w-full text-red-500">
                         Abmeiden
                     </Button>    
                 </div>
@@ -112,6 +161,18 @@ function SettingsPage() {
         {viewProfile && <EmployerDetails 
             onClose={()=> {setIsViewProfile(false)}} 
             isOpen={viewProfile} />}
+        
+        {impressumDialog && <ImpersumDialog
+            onClose={()=> {setImpressumDialog(false)}} 
+            isOpen={impressumDialog} />}
+
+        {allgemeine && <AllgemeineuDialog
+            onClose={()=> {setAllgemeine(false)}} 
+            isOpen={allgemeine} />}
+
+        {dateenschu && <DateenschuDialog
+            onClose={()=> {setDateenschu(false)}} 
+            isOpen={dateenschu} />}
         
         {changePassword && <ChangePassword 
             onClose={()=> {setChangePassword(false)}} 
@@ -140,7 +201,7 @@ function SettingsPage() {
                 })
             }}
             isLoading={confirmLogoutDialog.isLoading}
-            onYes={handleDeleteJobTitle}
+            onYes={onLogOut}
         />}
      
         { confirmDeleteAccountDialog.isOpen && <ConfirmDialog
@@ -162,7 +223,7 @@ function SettingsPage() {
                 })
             }}
             isLoading={confirmDeleteAccountDialog.isLoading}
-            onYes={handleDeleteJobTitle}
+            onYes={()=>{}}
         />}
     </> );
 }

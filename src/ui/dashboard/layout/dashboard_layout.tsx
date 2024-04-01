@@ -8,6 +8,7 @@ import { Navbar, NavbarContent, NavbarMenuToggle, NavbarBrand, NavbarItem, Butto
 import appLogo from '../../../assets/COUNTED Logo 1.svg';
 import { AddLocation } from "../../dialogs/add_location";
 import { JobList } from "../../dialogs/job_list";
+import { ToastContainer } from "react-toastify";
 
 
 interface DashboardLayoutProps {
@@ -54,6 +55,18 @@ export const DahsboardLayout =  (props: DashboardLayoutProps)=>{
 
     return (<>
         <div className="w-full h-[100vh]">
+        <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+        />
             <Navbar onMenuOpenChange={setIsMenuOpen} className="w-full bg-transparent md:h-[7em] sm:gap-4">
                 <NavbarContent>
                     <NavbarMenuToggle

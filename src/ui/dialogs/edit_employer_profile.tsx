@@ -37,7 +37,7 @@ export function EditEmployerProfile(props: EditEmployerProfileProps) {
 
     async function fetchLocationData() {
         setIsLoading(true)
-        setLoadingMessage('Fetching ocations')
+        setLoadingMessage('Fetching Locations')
         await axiosInstance.get('company/location')
             .then((response) => {
                 const data = response.data.data;
@@ -61,18 +61,18 @@ export function EditEmployerProfile(props: EditEmployerProfileProps) {
                 if (response.data.status) {
                     const data = Convert.toEmployeeData(JSON.stringify(response.data.data));
                     setRegisterData({
-                        company_name: data.company.company_name,
-                        logo: data.company?.logo,
                         email: data.email,
                         name: data.name,
-                        phone: data.phone,
                         surname: data.surname,
+                        phone: data.phone,
+                        state_id: data.company?.state_id.toString(),
+                        legal_entity_id: data?.company.legal_entity_id.toString(),
+                        street: data?.company?.street,
                         zipcode: data?.company?.zipcode,
                         contact_person: data?.company.contact_person,
                         location: data?.company.location,
-                        legal_entity_id: data?.company.legal_entity_id.toString(),
-                        state_id: data.company?.state_id.toString(),
-                        street: data?.company?.street
+                        company_name: data.company.company_name,
+                        logo: data.company?.logo,
                     });
                     console.log({imageUrl});
                 }
@@ -153,15 +153,7 @@ export function EditEmployerProfile(props: EditEmployerProfileProps) {
 
     async function handleSubmit() {
         setSubmitLoading(true);
-        await axiosInstance.post(`company/employee-update/${employeeData.id}`, toFormData({
-            // id: employeeData.id,
-            name: employeeData?.name,
-            surname: employeeData?.surname,
-            personal_number: employeeData?.employee?.personal_number,
-            license: employeeData?.employee?.license,
-            phone: employeeData.phone,
-            address_id: selectedValue?.id ?? employeeData?.employee.address_id,
-        }))
+        await axiosInstance.post(`company/update-profile/${employeeData.id}`, toFormData(registerData))
             .then((response) => {
                 if (response.data.status) {
                     toast.success(response.data.message, {
@@ -258,7 +250,7 @@ export function EditEmployerProfile(props: EditEmployerProfileProps) {
                                 {isLoading && <>
                                     <p className="text-black">
                                         {loadingMessage}
-                                        <Spinner size="sm"/>
+                                        <Spinner size="sm" className="pb-2 ml-2"/>
                                     </p>
                                 </>}
                                     <Avatar 
