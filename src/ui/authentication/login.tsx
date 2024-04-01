@@ -15,9 +15,7 @@ export const Login = ()=>{
     const navigate = useNavigate();
 
     const [loginData, setLoginData] = useState<LoginRequest>({});
-
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    
     const [errorMessage, setErrorMessage] = useState<string>('');
 
     const [error, setError] = useState({

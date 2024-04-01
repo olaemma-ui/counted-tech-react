@@ -125,7 +125,7 @@ export const Signup = ()=>{
     function isValid(){
         let valid : boolean = true;
         Object.entries(error).forEach(([key, value]) => {
-            if (value) valid = false;
+            if (value || registerData[key].length <= 0) valid = false;
         });
 
         return valid;

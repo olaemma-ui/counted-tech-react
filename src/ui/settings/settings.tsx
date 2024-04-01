@@ -15,6 +15,7 @@ function SettingsPage() {
         isOpen: false,
         isYes: false,
         isNo : false,
+        isLoading: false,
         // jobId: '',
     });
     
@@ -22,6 +23,7 @@ function SettingsPage() {
         isOpen: false,
         isYes: false,
         isNo : false,
+        isLoading: false,
         // jobId: '',
     });
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -80,6 +82,7 @@ function SettingsPage() {
                             isNo: false,
                             isYes: false,
                             isOpen: true,
+                            isLoading: false,
                         })
                     }} className="bg-white h-[4em] w-full">
                         Account loschen
@@ -132,10 +135,11 @@ function SettingsPage() {
                     isYes: false,
                     isNo: true,
                     isOpen: false,
+                    isLoading: false,
                     // jobId: '',
                 })
             }}
-            isLoading={isLoading}
+            isLoading={confirmLogoutDialog.isLoading}
             onYes={handleDeleteJobTitle}
         />}
      
@@ -153,10 +157,11 @@ function SettingsPage() {
                     isYes: false,
                     isNo: true,
                     isOpen: false,  
+                    isLoading: false,
                     // jobId: '',  
                 })
             }}
-            isLoading={isLoading}
+            isLoading={confirmDeleteAccountDialog.isLoading}
             onYes={handleDeleteJobTitle}
         />}
     </> );
