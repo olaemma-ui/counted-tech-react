@@ -1,7 +1,7 @@
 
 
-import {Card, CardHeader, CardBody, CardFooter, Divider, Chip, Button} from "@nextui-org/react";
-import { CalendarIcon, EyeIcon, SyncIcon, TodoListIcon } from "./svg_components";
+import {Card, CardHeader, CardBody, CardFooter, Divider, Chip, Button, Spinner} from "@nextui-org/react";
+import { ArrowDownIcon, CalendarIcon, CheckIcon, EyeIcon, SyncIcon, TodoListIcon } from "./svg_components";
 import { LocationData } from "../interface/response/dashboard_data";
 
 
@@ -96,4 +96,6 @@ export function DashboardAddressCard(props: DashboardAdressCardProps) {
     </Button>
   );
 }
+
+
 

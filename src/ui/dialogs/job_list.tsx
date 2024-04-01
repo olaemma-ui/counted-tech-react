@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Checkbox, Input, Link, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Divider, Spinner} from "@nextui-org/react";
-import { ArrowDownIcon, PencilIcon, TrashIcon } from "../../../_components/svg_components";
+import { ArrowDownIcon, PencilIcon, TrashIcon } from "../../_components/svg_components";
 import { Bounce, ToastContainer, toast } from "react-toastify";
-import { JobData, JobDataConvert } from "../../../interface/response/dashboard_data";
-import { LocalStorageService } from "../../../service/local_storage";
+import { JobData, JobDataConvert } from "../../interface/response/dashboard_data";
+import { LocalStorageService } from "../../service/local_storage";
 import { toFormData } from "axios";
-import { LocalStoragekey } from "../../../_constants/enums";
-import { axiosInstance } from "../../../service/axios_conf";
+import { LocalStoragekey } from "../../_constants/enums";
+import { axiosInstance } from "../../service/axios_conf";
 import ConfirmDialog from "./confirm_dialog";
 
 
 interface JobListProps{
     onClose?: () => void,
     isOpen: boolean,
-    jobList: JobData[],
 }
 
 export function JobList(props: JobListProps) {
@@ -24,7 +23,7 @@ export function JobList(props: JobListProps) {
 
     const [listener, setListener] = useState<string>('');
     const [jobTitle, setJobTitle] = useState<string>('');
-    const [jobDataList, setJobDataList] = useState<JobData[]>(props.jobList);
+    const [jobDataList, setJobDataList] = useState<JobData[]>();
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isLoadingAddJob, setIsLoadingAddJob] = useState<boolean>(false);
@@ -176,13 +175,13 @@ export function JobList(props: JobListProps) {
                 </div>
 
                 {isLoading && 
-                    <div className="flex gap-4 items-center">
+                    <div className="flex gap-4 items-center justify-center py-2">
                       <p className="text-black">Fetching Update</p>
                       <Spinner size="sm"/>
                     </div>
                 }
               
-                { jobDataList.map((e) => <div className="sm:flex gap-4 ">
+                { jobDataList?.map((e) => <div className="sm:flex gap-4 ">
                     <Input
                         variant="flat"
                         type="text"

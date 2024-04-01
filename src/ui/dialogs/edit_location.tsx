@@ -1,6 +1,6 @@
 import React from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Checkbox, Input, Link, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Divider} from "@nextui-org/react";
-import { ArrowDownIcon, PencilIcon } from "../../../_components/svg_components";
+import { ArrowDownIcon, PencilIcon } from "../../_components/svg_components";
 
 
 interface EditLocationProps{

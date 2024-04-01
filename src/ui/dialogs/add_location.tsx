@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Checkbox, Input, Link, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Divider, Switch, Spinner} from "@nextui-org/react";
-import { ArrowDownIcon } from "../../../_components/svg_components";
-import { CreateLocationRequest, CreateLocationRequestBreak, CreateLocationRequestConvert, CreateLocationRequestTimetable, JobData } from "../../../interface/response/dashboard_data";
+import { ArrowDownIcon } from "../../_components/svg_components";
+import { CreateLocationRequest, CreateLocationRequestBreak, CreateLocationRequestConvert, CreateLocationRequestTimetable, JobData, JobDataConvert } from "../../interface/response/dashboard_data";
 import { JobList } from "./job_list";
-import { validateFields } from "../../../urils/validation";
-import { convertDateFormat } from "../../../urils/utils";
+import { validateFields } from "../../urils/validation";
+import { convertDateFormat } from "../../urils/utils";
 import { toFormData } from "axios";
-import { axiosInstance } from "../../../service/axios_conf";
+import { axiosInstance } from "../../service/axios_conf";
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,7 +23,6 @@ import PlacesAutocomplete, {
 interface AddLocationProps{
     onClose: () => void,
     isOpen: boolean,
-    jobList: JobData[]
 }
 
 export function AddLocation(props: AddLocationProps) {
@@ -203,27 +202,46 @@ export function AddLocation(props: AddLocationProps) {
 
   
 
-  
-    
-    const [selectedKeys, setSelectedKeys] = useState(new Set([]));
-    const selectedValue = React.useMemo(
-      () => {
-        const value = Array.from(props.jobList.filter((job) => job.id == Array.from(selectedKeys)[0]))[0];
-        setCreateLocationRequestData({
-          ...createLocationRequestData,
-          job_title_id: value?.id
-        })
-      return value;
-    },
-    [selectedKeys]
-  );
+ 
 
 
+   
+  async function fetJobList () {
+    setJobLoading(true);
+    await axiosInstance.get('company/job-title-list')
+    .then((response) => {
+      const data = response.data.data;
+      const list : JobData[] = [];
+      
+        data.forEach((element : any) => {
+            list.push(JobDataConvert.toJobData(JSON.stringify(element)))
+        });
+        
+        setJobDataList(list);
+      }).catch((e) => e)
+      setJobLoading(false);
+  }
 
+  const [jobDataList, setJobDataList] = useState<JobData[]>();
+  const [jobLoading, setJobLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsLoading(false)
+    fetJobList()
   }, [])
+
+   
+    
+  const [selectedKeys, setSelectedKeys] = useState(new Set([]));
+  const selectedValue = React.useMemo(
+    () => {
+      const value = Array.from(jobDataList?.filter((job) => job.id == Array.from(selectedKeys ?? [])[0]) ?? [])[0];
+      setCreateLocationRequestData({
+        ...createLocationRequestData,
+        job_title_id: value?.id
+      })
+    return value;
+  },
+  [selectedKeys]);
   
 
   return (
@@ -318,31 +336,37 @@ export function AddLocation(props: AddLocationProps) {
                       </small>}
                   </div>
                    <div className="w-full">
-                    <Dropdown showArrow>
-                        <DropdownTrigger >
+                      <div className="flex gap-">
+                        <Dropdown showArrow>
+                          <DropdownTrigger >
 
-                          <div className={`p-4 flex items-center gap-2 justify-between rounded-xl h-[3.1em] ${selectedValue? 'text-black': 'text-gray-500 text-sm font-normal'} ${createLocationRequestDataError?.job_title_id && `border border-red-500 h-[4em]`} shadow-md w-full text-left `}>
-                            {selectedValue ? selectedValue.name : 'Art der Arbeit'}
-                            <ArrowDownIcon width="20" height="20" className="self-end justify-self-end" />
-                          </div>
-                        </DropdownTrigger>
-                        <DropdownMenu 
-                          aria-label="Single selection example"
-                          variant="flat"
-                          disallowEmptySelection
-                          selectionMode="single"
-                          selectedKeys={selectedKeys}
-                          //@ts-ignore
-                          onSelectionChange={setSelectedKeys}
-                        >
-                        {props.jobList.map((e)=> 
-                              <DropdownItem 
-                                  key={e.id} 
-                                  className="text-black">
-                                      {e.name}
-                              </DropdownItem>)}
-                        </DropdownMenu>
-                      </Dropdown>
+                            <div className={`p-4 flex items-center gap-2 justify-between rounded-xl h-[3.1em] ${selectedValue? 'text-black': 'text-gray-500 text-sm font-normal'} ${createLocationRequestDataError?.job_title_id && `border border-red-500 h-[4em]`} shadow-md w-full text-left `}>
+                              {selectedValue ? selectedValue.name : 'Art der Arbeit'}
+                              <div className="flex gap-2">
+                                <ArrowDownIcon width="20" height="20" className="self-end justify-self-end" />
+                                {jobLoading && <Spinner size='sm'/>}
+                              </div>
+                            </div>
+                          </DropdownTrigger>
+                          <DropdownMenu 
+                            aria-label="Single selection example"
+                            variant="flat"
+                            disallowEmptySelection
+                            selectionMode="single"
+                            selectedKeys={selectedKeys}
+                            //@ts-ignore
+                            onSelectionChange={setSelectedKeys}
+                          >
+                          {jobDataList?.map((e)=> 
+                                <DropdownItem 
+                                    key={e.id} 
+                                    className="text-black">
+                                        {e.name}
+                                </DropdownItem>
+                          )}
+                          </DropdownMenu>
+                        </Dropdown>
+                      </div>
                       {createLocationRequestDataError && <small className="text-red-500 block mb-3 pl-3 text-left">
                           {createLocationRequestDataError.job_title_id}
                       </small>}

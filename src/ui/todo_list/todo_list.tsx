@@ -11,8 +11,9 @@ import { toFormData } from "axios";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-import ConfirmDialog from "../dashboard/dialogs/confirm_dialog";
+import ConfirmDialog from "../dialogs/confirm_dialog";
 import { Todo, TodoConvert, TodoImage } from "../../interface/request/materials";
+import { DahsboardLayout } from "../dashboard/layout/dashboard_layout";
 
 
 export const TodoListPage = ()=>{
@@ -152,106 +153,108 @@ export const TodoListPage = ()=>{
             pauseOnHover
             theme="dark"
         />
-        <div className="py-5 flex items-center justify-center">
-           <div className="flex flex-col sm:flex-row gap-8 sm:my-0 my-5 sm:p-8 p-4 rounded-xl bg-white m-4 w-full sm:h-[95vh] h-full overflow-auto">
-                <div className="content flex flex-col gap-5 sm:w-[30em] w-full  sm:max-w-[18em]">
-                    <div className="left w-full flex gap-2">
-                        <Input 
-                            size="md"
-                            radius="sm"
-                            placeholder="Todo name"
-                            value={todoName}
-                            isReadOnly={isLoadingCreateTodo}
-                            onChange={(e)=>{
-                                setTodoName(e.target.value);
-                            }}
-                            className="rounded-sm shadow-md bg-white w-full"
-                        />                    
-                        <Button
-                            isIconOnly
-                            className="rounded-md bg-[#0EAD69]"
-                            isLoading={isLoadingCreateTodo}
-                            onPress={handleCreateTodo}
-                        >
-                            <CheckIcon/>
-                        </Button>
-                    </div>
-
-                    {/* <Divider className=" h-[0.15em] bg-[#4269E1]"/> */}
-                    
-                    <div className="flex flex-col gap-4">
-                        {isLoadingAllTodo && <>
-                            <div className="flex gap-4 items-center">
-                                <p className="text-black">Fetching Update</p>
-                                <Spinner size="sm"/>
+        <DahsboardLayout>
+            <div className="py-5 flex items-center justify-center">
+                <div className="flex flex-col sm:flex-row gap-8 sm:my-0 my-5 sm:p-8 p-4 rounded-xl bg-white m-4 w-full sm:h-[95vh] h-full overflow-auto">
+                        <div className="content flex flex-col gap-5 sm:w-[30em] w-full  sm:max-w-[18em]">
+                            <div className="left w-full flex gap-2">
+                                <Input 
+                                    size="md"
+                                    radius="sm"
+                                    placeholder="Todo name"
+                                    value={todoName}
+                                    isReadOnly={isLoadingCreateTodo}
+                                    onChange={(e)=>{
+                                        setTodoName(e.target.value);
+                                    }}
+                                    className="rounded-sm shadow-md bg-white w-full"
+                                />                    
+                                <Button
+                                    isIconOnly
+                                    className="rounded-md bg-[#0EAD69]"
+                                    isLoading={isLoadingCreateTodo}
+                                    onPress={handleCreateTodo}
+                                >
+                                    <CheckIcon/>
+                                </Button>
                             </div>
+
+                            {/* <Divider className=" h-[0.15em] bg-[#4269E1]"/> */}
+                            
+                            <div className="flex flex-col gap-4">
+                                {isLoadingAllTodo && <>
+                                    <div className="flex gap-4 items-center">
+                                        <p className="text-black">Fetching Update</p>
+                                        <Spinner size="sm"/>
+                                    </div>
+                                </>}
+                                {
+                                    todos?.map((elem) => {
+                                        return <div className="left w-full flex gap-2">
+                                            <Input 
+                                                size="md"
+                                                radius="sm"
+                                                placeholder="Todo name"
+                                                value={elem.name}
+                                                onClick={()=>{
+                                                    fetchTodoImage(elem.id);
+                                                }}
+                                                isReadOnly
+                                                classNames={{
+                                                    input: 'cursor-pointer'
+                                                }}
+                                                className="rounded-sm shadow-lg w-full cursor-pointer"
+                                            />                    
+                                            <Button
+                                                isIconOnly
+                                                onPress={()=>{
+                                                    setDeleteTodoDialogObject({
+                                                        isOpen: true,
+                                                        todoId: elem.id,
+                                                        isYes: false,
+                                                        isNo: false,
+                                                    })
+                                                }}
+                                                className="rounded-md bg-[#AD0E0E]"
+                                            >
+                                                <TrashIcon width="20" height="20"/>
+                                            </Button>
+                                        </div>
+                
+                                    })
+                                }
+                            </div>
+                        </div>
+
+                        <div className="content w-full sm:m-0 my-5 pb-5 border-l border-[#4269E1] px-4">
+                            
+                        {!isLoadingAllTodoImage &&  todoImage?.map((todoData) =>{
+                            return <Card className="py-4 max-w-[40em]">
+                                        <CardHeader className="pb-0 pt-2 px-4 flex items-start justify-between">
+                                            <p className="text-tiny uppercase font-bold">{todoData.user.name} {todoData.user.surname}</p>
+                                            <p className="text-tiny uppercase font-bold">{new Date(todoData.created_at).toLocaleDateString()}</p>
+                                        </CardHeader>
+                                        <CardBody className="overflow-visible py-2">
+                                            <img
+                                                className="w-full max-w-[40em] rounded-lg" 
+                                                src={todoData?.image ? `${todoData.image && import.meta.env.VITE_COUNTEDT_TECH_COMPANY_IMAGE_URL}${todoData?.image}`: ''}
+                                                alt="" />
+                                        </CardBody>
+                                    </Card>
+                        })}
+
+                        {isLoadingAllTodoImage &&  <>
+                            <p className="text-black">Loading Todo Image <Spinner size='sm' /></p>
                         </>}
-                        {
-                            todos?.map((elem) => {
-                                return <div className="left w-full flex gap-2">
-                                    <Input 
-                                        size="md"
-                                        radius="sm"
-                                        placeholder="Todo name"
-                                        value={elem.name}
-                                        onClick={()=>{
-                                            fetchTodoImage(elem.id);
-                                        }}
-                                        isReadOnly
-                                        classNames={{
-                                            input: 'cursor-pointer'
-                                        }}
-                                        className="rounded-sm shadow-lg w-full cursor-pointer"
-                                    />                    
-                                    <Button
-                                        isIconOnly
-                                        onPress={()=>{
-                                            setDeleteTodoDialogObject({
-                                                isOpen: true,
-                                                todoId: elem.id,
-                                                isYes: false,
-                                                isNo: false,
-                                            })
-                                        }}
-                                        className="rounded-md bg-[#AD0E0E]"
-                                    >
-                                        <TrashIcon width="20" height="20"/>
-                                    </Button>
-                                </div>
-        
-                            })
-                        }
-                    </div>
+
+                        {todoImage?.length == 0 && !isLoadingAllTodoImage &&  <>
+                            <p className="text-black">No Todo Image Uploaded </p>
+                        </>}
+
+                        </div>
                 </div>
-
-                <div className="content w-full sm:m-0 my-5 pb-5 border-l border-[#4269E1] px-4">
-                    
-                  {!isLoadingAllTodoImage &&  todoImage?.map((todoData) =>{
-                    return <Card className="py-4 max-w-[40em]">
-                                <CardHeader className="pb-0 pt-2 px-4 flex items-start justify-between">
-                                    <p className="text-tiny uppercase font-bold">{todoData.user.name} {todoData.user.surname}</p>
-                                    <p className="text-tiny uppercase font-bold">{new Date(todoData.created_at).toLocaleDateString()}</p>
-                                </CardHeader>
-                                <CardBody className="overflow-visible py-2">
-                                    <img
-                                        className="w-full max-w-[40em] rounded-lg" 
-                                        src={todoData?.image ? `${todoData.image && import.meta.env.VITE_COUNTEDT_TECH_COMPANY_IMAGE_URL}${todoData?.image}`: ''}
-                                        alt="" />
-                                </CardBody>
-                            </Card>
-                  })}
-
-                  {isLoadingAllTodoImage &&  <>
-                    <p className="text-black">Loading Todo Image <Spinner size='sm' /></p>
-                  </>}
-
-                  {todoImage?.length == 0 && !isLoadingAllTodoImage &&  <>
-                    <p className="text-black">No Todo Image Uploaded </p>
-                  </>}
-
-                </div>
-           </div>
-        </div>
+            </div>
+        </DahsboardLayout>
 
         { deleteTodoDialogObject.isOpen && <ConfirmDialog
             icon={<>

@@ -1,11 +1,11 @@
 
 import {Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Avatar, Spinner} from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../../service/axios_conf";
+import { axiosInstance } from "../../service/axios_conf";
 import { useEffect, useState } from "react";
-import { Convert, EmployeeData } from "../../../interface/response/dto";
-import { LocalStorageService } from "../../../service/local_storage";
-import { LocalStoragekey } from "../../../_constants/enums";
+import { Convert, EmployeeData } from "../../interface/response/dto";
+import { LocalStorageService } from "../../service/local_storage";
+import { LocalStoragekey } from "../../_constants/enums";
 
 interface ViewEmployeesProps{
     onClose?: () => void,

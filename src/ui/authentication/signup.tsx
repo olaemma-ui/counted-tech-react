@@ -44,7 +44,7 @@ export const Signup = ()=>{
     const [selectedStateKeys, setSelectedStateKeys] = React.useState(new Set([]));
     const selectedStateValue = React.useMemo(
       () => {
-        const value = Array.from(stateList.filter((state) => state.id == Array.from(selectedStateKeys)[0]))[0];
+        const value = Array.from(stateList?.filter((state) => state.id == Array.from(selectedStateKeys)[0])?? [])[0];
         setRegisterData({
             ...registerData,
             legal_entity_id: `${value?.id}`
@@ -59,7 +59,7 @@ export const Signup = ()=>{
     const [selectedLegalFormKeys, setSelectedLegalFormKeys] = React.useState(new Set([]));
     const setSelectedLegalFormValue = React.useMemo(
         () => {
-            const value = Array.from(formList.filter((state) => state.id == Array.from(selectedLegalFormKeys)[0]))[0];
+            const value = Array.from(formList?.filter((state) => state.id == Array.from(selectedLegalFormKeys)[0]) ?? [])[0];
             setRegisterData({
                 ...registerData,
                 state_id: `${value?.id}`
@@ -141,7 +141,7 @@ export const Signup = ()=>{
             setIsLoading(true);
 
             await axiosInstance.post(
-                '/register', toFormData(registerData),
+                '/auth/register', toFormData(registerData),
             ).then((response) =>{
                 
                 console.log(response.data);
@@ -211,7 +211,7 @@ export const Signup = ()=>{
                                 //@ts-ignore
                                 onSelectionChange={!isLoading && setSelectedStateKeys}
                             >
-                                {stateList.map((e)=> 
+                                {stateList?.map((e)=> 
                                     <DropdownItem 
                                         key={e.id} 
                                         className="text-black">
@@ -237,7 +237,7 @@ export const Signup = ()=>{
                                 //@ts-ignore
                                 onSelectionChange={!isLoading && setSelectedLegalFormKeys}
                             >
-                                {formList.map((e)=> 
+                                {formList?.map((e)=> 
                                     <DropdownItem 
                                         key={e.id} 
                                         className="text-black">
@@ -255,7 +255,7 @@ export const Signup = ()=>{
                                 label="Telefonnummer" 
                                 isReadOnly={isLoading}
                                 classNames={{
-                                    inputWrapper: `${error.phone && 'border border-red-600'}`
+                                    inputWrapper: `${error?.phone && 'border border-red-600'}`
                                 }}
                                 onChange={(e)=>{
                                     handleOnchange(
@@ -267,7 +267,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.phone}
+                                    {error?.phone}
                                 </small>
                        </div>
 
@@ -278,7 +278,7 @@ export const Signup = ()=>{
                             isReadOnly={isLoading}
                             label="Vorname" 
                             classNames={{
-                                inputWrapper: `${error.surname && 'border border-red-600'}`
+                                inputWrapper: `${error?.surname && 'border border-red-600'}`
                             }}
                             onChange={(e)=>{
                                 handleOnchange(
@@ -290,7 +290,7 @@ export const Signup = ()=>{
                             }}
                             className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                             <small className="text-red-500 block mb-3 pl-3 text-left">
-                                {error.surname}
+                                {error?.surname}
                             </small>
                      </div>
 
@@ -305,7 +305,7 @@ export const Signup = ()=>{
                                 isReadOnly={isLoading}
                                 label="Nachname" 
                                 classNames={{
-                                    inputWrapper: `${error.name && 'border border-red-600'}`
+                                    inputWrapper: `${error?.name && 'border border-red-600'}`
                                 }}
                                 onChange={(e)=>{
                                     handleOnchange(
@@ -317,7 +317,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.name}
+                                    {error?.name}
                                 </small>
                         </div>
 
@@ -328,7 +328,7 @@ export const Signup = ()=>{
                                 isReadOnly={isLoading}
                                 label="E-Mail" 
                                 classNames={{
-                                    inputWrapper: `${error.email && 'border border-red-600'}`
+                                    inputWrapper: `${error?.email && 'border border-red-600'}`
                                 }}
                                 onChange={(e)=>{
                                     handleOnchange(
@@ -340,7 +340,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large text-black rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.email}
+                                    {error?.email}
                                 </small>
                         </div>
 
@@ -356,7 +356,7 @@ export const Signup = ()=>{
                                 isReadOnly={isLoading}
                                 label="PLZ" 
                                 classNames={{
-                                    inputWrapper: `${error.zipcode && 'border border-red-600'}`
+                                    inputWrapper: `${error?.zipcode && 'border border-red-600'}`
                                 }}
                                 onChange={(e)=>{
                                     handleOnchange(
@@ -368,7 +368,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.zipcode}
+                                    {error?.zipcode}
                                 </small>
                         </div>
                         <div className="w-full">
@@ -378,7 +378,7 @@ export const Signup = ()=>{
                                 label="Ort" 
                                 isReadOnly={isLoading}
                                 classNames={{
-                                    inputWrapper: `${error.location && 'border border-red-600'}`
+                                    inputWrapper: `${error?.location && 'border border-red-600'}`
                                 }}
                                 onChange={(e)=>{
                                     handleOnchange(
@@ -390,7 +390,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.location}
+                                    {error?.location}
                                 </small>
                         </div>
                    </div>
@@ -403,7 +403,7 @@ export const Signup = ()=>{
                                 label="Street" 
                                 isReadOnly={isLoading}
                                 classNames={{
-                                    inputWrapper: `${error.street && 'border border-red-600'}`
+                                    inputWrapper: `${error?.street && 'border border-red-600'}`
                                 }}
                                 onChange={(e)=>{
                                     handleOnchange(
@@ -415,7 +415,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.street}
+                                    {error?.street}
                                 </small>
                         </div>
                         
@@ -426,7 +426,7 @@ export const Signup = ()=>{
                                 isReadOnly={isLoading}
                                 label="Ansprechpartner" 
                                 classNames={{
-                                    inputWrapper: `${error.contact_person && 'border border-red-600'}`
+                                    inputWrapper: `${error?.contact_person && 'border border-red-600'}`
                                 }}
                                 onChange={(e)=>{
                                     handleOnchange(
@@ -438,7 +438,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.contact_person}
+                                    {error?.contact_person}
                                 </small>
                         </div>
                    </div>
@@ -450,7 +450,7 @@ export const Signup = ()=>{
                                 type="text" 
                                 label="Firmenname" 
                                 classNames={{
-                                    inputWrapper: `${error.company_name && 'border border-red-600'}`
+                                    inputWrapper: `${error?.company_name && 'border border-red-600'}`
                                 }}
                                 isReadOnly={isLoading}
                                 onChange={(e)=>{
@@ -463,7 +463,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.company_name}
+                                    {error?.company_name}
                                 </small>
                         </div>
                         <div className="w-full">
@@ -474,7 +474,7 @@ export const Signup = ()=>{
                                 accept="image/*"
                                 label="Firmenlogo" 
                                 classNames={{
-                                    inputWrapper: `${error.logo && 'border border-red-600'}`,
+                                    inputWrapper: `${error?.logo && 'border border-red-600'}`,
                                     label: 'pb-3'
                                 }}
                                 isReadOnly={isLoading}
@@ -491,7 +491,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.logo}
+                                    {error?.logo}
                                 </small>
                         </div>
 
@@ -506,7 +506,7 @@ export const Signup = ()=>{
                                 label="Passwort" 
                                 isReadOnly={isLoading}
                                 classNames={{
-                                    inputWrapper: `${error.password && 'border border-red-600'}`
+                                    inputWrapper: `${error?.password && 'border border-red-600'}`
                                 }}
                                 onChange={(e)=>{
                                     handleOnchange(
@@ -518,7 +518,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.password}
+                                    {error?.password}
                                 </small>
                         </div>
                         <div className="w-full">
@@ -528,7 +528,7 @@ export const Signup = ()=>{
                                 isReadOnly={isLoading}
                                 label="Passwort wiederholen" 
                                 classNames={{
-                                    inputWrapper: `${error.password_confirmation && 'border border-red-600'}`
+                                    inputWrapper: `${error?.password_confirmation && 'border border-red-600'}`
                                 }}
                                 onChange={(e)=>{
                                     handleOnchange(
@@ -540,7 +540,7 @@ export const Signup = ()=>{
                                 }}
                                 className="shadow-large rounded-3xl bg-[#FFFFFF]" />
                                 <small className="text-red-500 block mb-3 pl-3 text-left">
-                                    {error.password_confirmation}
+                                    {error?.password_confirmation}
                                 </small>
                         </div>
                    </div>

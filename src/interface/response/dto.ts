@@ -25,6 +25,7 @@ export interface EmployeeData {
     employee?:          Employee;
     timetable?:         Timetable[];
     breaks?:            Break[];
+    company?:            Company;
 }
 
 export interface Employee {
@@ -156,8 +157,41 @@ export interface MessageRequest {
 }
 
 
+// To parse this data:
+//
+//   import { Convert, PackageProps } from "./file";
+//
+//   const packageProps = Convert.toPackageProps(json);
+
+export interface PackageProps {
+    id?:             number;
+    name?:           string;
+    description?:    string;
+    employee_count?: number;
+    price?:          string;
+    admin_count?:    number;
+    month_count?:    number;
+    created_at?:     Date;
+    updated_at?:     Date;
+    chat?:           number;
+    material?:       number;
+    absent?:         number;
+    vocation?:       number;
+    todo?:           number;
+}
+
+
 // Converts JSON strings to/from your types
 export class Convert {
+    
+    public static toPackageProps(json: string): PackageProps {
+        return JSON.parse(json);
+    }
+
+    public static packagePropsToJson(value: PackageProps): string {
+            return JSON.stringify(value);
+    }
+
     public static toEmployeeData(json: string): EmployeeData {
         return JSON.parse(json);
     }

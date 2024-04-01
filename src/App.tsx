@@ -14,6 +14,8 @@ import { EmployeeDetails } from "./ui/employee/view_employee";
 import { Chat } from "./ui/chat/chat";
 import { DahsboardLayout } from "./ui/dashboard/layout/dashboard_layout";
 import { TodoListPage } from "./ui/todo_list/todo_list";
+import SettingsPage from "./ui/settings/settings";
+import PakcgaePage from "./ui/package/package";
 
 function App() {
 
@@ -33,10 +35,10 @@ function App() {
               }/>
              
               {/* <Route path={'/test'} element={<DahsboardLayout/>}/> */}
-              <Route path={'/register'} element={<Signup/>}/>
-              <Route path={'/forget-password'} element={<ForgotPassword/>}/>
-              <Route path={'/otp-verification'} element={<OtpVerification/>}/>
-              <Route path={'/set-password'} element={<SetPassword/>}/>
+              <Route path={'/auth/register'} element={<Signup/>}/>
+              <Route path={'/auth/forget-password'} element={<ForgotPassword/>}/>
+              <Route path={'/auth/otp-verification'} element={<OtpVerification/>}/>
+              <Route path={'/auth/set-password'} element={<SetPassword/>}/>
 
             </Route>
             
@@ -71,6 +73,18 @@ function App() {
               <Route path={"todo"} element={
                 <ProptectedRoute>
                   <TodoListPage/>
+                </ProptectedRoute>
+              } />
+
+              <Route path={"settings"} element={
+                <ProptectedRoute>
+                  <SettingsPage/>
+                </ProptectedRoute>
+              } />
+
+              <Route path={"packages"} element={
+                <ProptectedRoute>
+                  <PakcgaePage/>
                 </ProptectedRoute>
               } />
             </Route>

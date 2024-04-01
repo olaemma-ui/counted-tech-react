@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Checkbox, Input, Link, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Divider, Avatar} from "@nextui-org/react";
-import { ArrowDownIcon, PencilIcon } from "../../../_components/svg_components";
+import { ArrowDownIcon, PencilIcon } from "../../_components/svg_components";
 import { EditLocation } from "./edit_location";
-import { LocationData } from "../../../interface/response/dashboard_data";
+import { LocationData } from "../../interface/response/dashboard_data";
 
 
 interface ViewLocationProps{

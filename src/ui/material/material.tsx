@@ -13,7 +13,8 @@ import { Material, MaterialConvert, MaterialRequest, MaterialRequestConvert } fr
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
-import ConfirmDialog from "../dashboard/dialogs/confirm_dialog";
+import ConfirmDialog from "../dialogs/confirm_dialog";
+import { DahsboardLayout } from "../dashboard/layout/dashboard_layout";
 
 
 export const MaterialsPage = ()=>{
@@ -216,189 +217,191 @@ export const MaterialsPage = ()=>{
             pauseOnHover
             theme="dark"
         />
-        <div className="py-5 flex items-center justify-center">
-           <div className="flex flex-col md:flex-row gap-8 sm:my-0 my-5 sm:p-8 p-4 rounded-xl bg-white m-4 w-full sm:h-[95vh] h-full overflow-auto">
-                <div className="content flex md:flex-col flex-row gap-5 sm:w-[30em] w-full sm:max-w-full max-w-[18em]">
-                    <div className="left w-full flex gap-2">
-                        <Input 
-                            size="md"
-                            radius="sm"
-                            placeholder="Material name"
-                            value={materialName}
-                            isReadOnly={isLoadingCreateMaterial}
-                            onChange={(e)=>{
-                                setMaterialName(e.target.value);
-                            }}
-                            className="rounded-sm shadow-md bg-white w-full"
-                        />                    
-                        <Button
-                            isIconOnly
-                            className="rounded-md bg-[#0EAD69]"
-                            isLoading={isLoadingCreateMaterial}
-                            onPress={handleCreateMaterial}
-                        >
-                            <CheckIcon/>
-                        </Button>
-                    </div>
-
-                    <Divider className=" h-[0.15em] bg-[#4269E1]"/>
-                    
-                    <div className="flex flex-col gap-4">
-                        {isLoadingAllMaterial && <>
-                            <div className="flex gap-4 items-center">
-                                <p className="text-black">Fetching Update</p>
-                                <Spinner size="sm"/>
+        <DahsboardLayout>
+            <div className="py-5 flex items-center justify-center">
+                <div className="flex flex-col md:flex-row gap-8 sm:my-0 my-5 sm:p-8 p-4 rounded-xl bg-white m-4 w-full sm:h-[95vh] h-full overflow-auto">
+                        <div className="content flex md:flex-col flex-row gap-5 sm:w-[30em] w-full sm:max-w-full max-w-[18em]">
+                            <div className="left w-full flex gap-2">
+                                <Input 
+                                    size="md"
+                                    radius="sm"
+                                    placeholder="Material name"
+                                    value={materialName}
+                                    isReadOnly={isLoadingCreateMaterial}
+                                    onChange={(e)=>{
+                                        setMaterialName(e.target.value);
+                                    }}
+                                    className="rounded-sm shadow-md bg-white w-full"
+                                />                    
+                                <Button
+                                    isIconOnly
+                                    className="rounded-md bg-[#0EAD69]"
+                                    isLoading={isLoadingCreateMaterial}
+                                    onPress={handleCreateMaterial}
+                                >
+                                    <CheckIcon/>
+                                </Button>
                             </div>
-                        </>}
-                        {
-                            materials?.map((elem) => {
-                                return <div className="left w-full flex gap-2">
-                                    <Input 
-                                        size="md"
-                                        radius="sm"
-                                        placeholder="Material name"
-                                        value={elem.name}
-                                        isReadOnly
-                                        className="rounded-sm shadow-lg w-full"
-                                    />                    
-                                    <Button
-                                        isIconOnly
-                                        isLoading={isLoadingDeleteMaterial}
-                                        onPress={()=>{
-                                            setDeleteMaterialDialogObject({
-                                                isOpen: true,
-                                                materialId: elem.id,
-                                                isYes: false,
-                                                isNo: false,
-                                            })
-                                        }}
-                                        className="rounded-md bg-[#AD0E0E]"
-                                    >
-                                        <TrashIcon width="20" height="20"/>
-                                    </Button>
-                                </div>
-        
-                            })
-                        }
-                    </div>
-                </div>
 
-                <Divider className=" h-[0.12em] bg-[#4269E1] sm:hidden block"/>
-
-                <div className="content w-full sm:m-0 my-5 pb-5">
-                    
-                    <div className="max-h-[20em] w-full">
-                        {materialRequests?.map((element) => {
-                            return <div className="left flex sm:flex-row flex-col sm:gap-2 gap-4">
-                                <Input 
-                                    isReadOnly
-                                    size="md"
-                                    radius="sm"
-                                    placeholder="Surename Name"
-                                    value={element.user.surname}
-                                    className="rounded-sm shadow-lg w-full"
-                                    />                    
-                                <Input 
-                                    isReadOnly
-                                    size="md"
-                                    radius="sm"
-                                    placeholder="Material"
-                                    value={element.material.name}
-                                    className="rounded-sm shadow-lg w-full"
-                                    />                    
-                                <Input 
-                                    isReadOnly
-                                    size="md"
-                                    radius="sm"
-                                    placeholder="4 kg"
-                                    value={element.unit.name}
-                                    className="rounded-sm shadow-lg"
-                                />                   
-                                <div className="flex gap-4 sm:m-0 mt-3">
-                                    <Button
-                                        isIconOnly
-                                        onPress={()=>{
-                                            handleMaterialRequest(element.material_id, 'approved')
-                                        }}
-                                        className="rounded-md bg-[#0EAD69]">
-                                        <CheckIcon/>
-                                    </Button>
-                                    <Button
-                                        isIconOnly
-                                        onPress={()=>{
-                                            handleMaterialRequest(element.material_id, 'delined')
-                                        }}
-                                        className="rounded-md bg-[#AD0E0E]">
-                                        <TrashIcon/>
-                                    </Button>
-                                </div> 
+                            <Divider className=" h-[0.15em] bg-[#4269E1]"/>
+                            
+                            <div className="flex flex-col gap-4">
+                                {isLoadingAllMaterial && <>
+                                    <div className="flex gap-4 items-center">
+                                        <p className="text-black">Fetching Update</p>
+                                        <Spinner size="sm"/>
+                                    </div>
+                                </>}
+                                {
+                                    materials?.map((elem) => {
+                                        return <div className="left w-full flex gap-2">
+                                            <Input 
+                                                size="md"
+                                                radius="sm"
+                                                placeholder="Material name"
+                                                value={elem.name}
+                                                isReadOnly
+                                                className="rounded-sm shadow-lg w-full"
+                                            />                    
+                                            <Button
+                                                isIconOnly
+                                                isLoading={isLoadingDeleteMaterial}
+                                                onPress={()=>{
+                                                    setDeleteMaterialDialogObject({
+                                                        isOpen: true,
+                                                        materialId: elem.id,
+                                                        isYes: false,
+                                                        isNo: false,
+                                                    })
+                                                }}
+                                                className="rounded-md bg-[#AD0E0E]"
+                                            >
+                                                <TrashIcon width="20" height="20"/>
+                                            </Button>
+                                        </div>
+                
+                                    })
+                                }
                             </div>
-                        })}
-                    </div>
+                        </div>
+
+                        <Divider className=" h-[0.12em] bg-[#4269E1] sm:hidden block"/>
+
+                        <div className="content w-full sm:m-0 my-5 pb-5">
+                            
+                            <div className="max-h-[20em] w-full">
+                                {materialRequests?.map((element) => {
+                                    return <div className="left flex sm:flex-row flex-col sm:gap-2 gap-4">
+                                        <Input 
+                                            isReadOnly
+                                            size="md"
+                                            radius="sm"
+                                            placeholder="Surename Name"
+                                            value={element.user.surname}
+                                            className="rounded-sm shadow-lg w-full"
+                                            />                    
+                                        <Input 
+                                            isReadOnly
+                                            size="md"
+                                            radius="sm"
+                                            placeholder="Material"
+                                            value={element.material.name}
+                                            className="rounded-sm shadow-lg w-full"
+                                            />                    
+                                        <Input 
+                                            isReadOnly
+                                            size="md"
+                                            radius="sm"
+                                            placeholder="4 kg"
+                                            value={element.unit.name}
+                                            className="rounded-sm shadow-lg"
+                                        />                   
+                                        <div className="flex gap-4 sm:m-0 mt-3">
+                                            <Button
+                                                isIconOnly
+                                                onPress={()=>{
+                                                    handleMaterialRequest(element.material_id, 'approved')
+                                                }}
+                                                className="rounded-md bg-[#0EAD69]">
+                                                <CheckIcon/>
+                                            </Button>
+                                            <Button
+                                                isIconOnly
+                                                onPress={()=>{
+                                                    handleMaterialRequest(element.material_id, 'delined')
+                                                }}
+                                                className="rounded-md bg-[#AD0E0E]">
+                                                <TrashIcon/>
+                                            </Button>
+                                        </div> 
+                                    </div>
+                                })}
+                            </div>
 
 
-                    <Table
-                        aria-label="Example table with client side sorting"
-                        sortDescriptor={list.sortDescriptor}
-                        onSortChange={list.sort}
-                        classNames={{
-                            table: "min-h-[400px] text-black",
-                            td: "border-r"
-                        }}
-                        className=" max-h-[100%]  shadow-lg"
-                        >
-                        <TableHeader>
-                            <TableColumn key="surname"> 
-                                Surname 
-                            </TableColumn>
-                            <TableColumn key="name">
-                            Name
-                            </TableColumn>
-                            <TableColumn key="material" allowsSorting>
-                            Material
-                            </TableColumn>
-                            <TableColumn key="Art.-Nr" allowsSorting>
-                            Art.-Nr
-                            </TableColumn>
-                            <TableColumn key="number">
-                            Anzahl
-                            </TableColumn>
-                            <TableColumn key="unit" allowsSorting>
-                            Einheit
-                            </TableColumn>
-                            <TableColumn key="datum" allowsSorting>
-                            Datum
-                            </TableColumn>
-                        </TableHeader>
-                        <TableBody 
-                            items={list.items} 
-                            isLoading={isLoading}
-                            loadingContent={<Spinner label="Loading..." />}
-                        >
-                            {(item : any) => (
-                            <TableRow key={item.name}>
-                                {(columnKey) => {
-                                    
-                                    let date = getKeyValue(item, 'created_at');
-
-                                    return <TableCell>
-                                        {columnKey == 'name' || columnKey == 'surname' ? getKeyValue(item.user, columnKey) : ''}
-                                        {columnKey == 'unit' ? getKeyValue(item.unit, 'name') : ''}
-                                        {columnKey == 'material' ? getKeyValue(item.material, 'name') : ''}
-                                        {columnKey == 'number' ? getKeyValue(item, columnKey) : ''}
-                                        {columnKey == 'datum' ? `${date.split('T')[0]}` : ''}
-                                    </TableCell>
+                            <Table
+                                aria-label="Example table with client side sorting"
+                                sortDescriptor={list.sortDescriptor}
+                                onSortChange={list.sort}
+                                classNames={{
+                                    table: "min-h-[400px] text-black",
+                                    td: "border-r"
                                 }}
-                            </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                    
-                    
+                                className=" max-h-[100%]  shadow-lg"
+                                >
+                                <TableHeader>
+                                    <TableColumn key="surname"> 
+                                        Surname 
+                                    </TableColumn>
+                                    <TableColumn key="name">
+                                    Name
+                                    </TableColumn>
+                                    <TableColumn key="material" allowsSorting>
+                                    Material
+                                    </TableColumn>
+                                    <TableColumn key="Art.-Nr" allowsSorting>
+                                    Art.-Nr
+                                    </TableColumn>
+                                    <TableColumn key="number">
+                                    Anzahl
+                                    </TableColumn>
+                                    <TableColumn key="unit" allowsSorting>
+                                    Einheit
+                                    </TableColumn>
+                                    <TableColumn key="datum" allowsSorting>
+                                    Datum
+                                    </TableColumn>
+                                </TableHeader>
+                                <TableBody 
+                                    items={list.items} 
+                                    isLoading={isLoading}
+                                    loadingContent={<Spinner label="Loading..." />}
+                                >
+                                    {(item : any) => (
+                                    <TableRow key={item.name}>
+                                        {(columnKey) => {
+                                            
+                                            let date = getKeyValue(item, 'created_at');
 
+                                            return <TableCell>
+                                                {columnKey == 'name' || columnKey == 'surname' ? getKeyValue(item.user, columnKey) : ''}
+                                                {columnKey == 'unit' ? getKeyValue(item.unit, 'name') : ''}
+                                                {columnKey == 'material' ? getKeyValue(item.material, 'name') : ''}
+                                                {columnKey == 'number' ? getKeyValue(item, columnKey) : ''}
+                                                {columnKey == 'datum' ? `${date.split('T')[0]}` : ''}
+                                            </TableCell>
+                                        }}
+                                    </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                            
+                            
+
+                        </div>
                 </div>
-           </div>
-        </div>
+                </div>
+      </DahsboardLayout>
 
         { deleteMaterialDialogObject.isOpen && <ConfirmDialog
             icon={<>
