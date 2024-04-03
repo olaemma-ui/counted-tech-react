@@ -178,11 +178,54 @@ export interface PackageProps {
     absent?:         number;
     vocation?:       number;
     todo?:           number;
+    activePackageId?: number;
+}
+
+// To parse this data:
+//
+//   import { Convert, Orders } from "./file";
+//
+//   const orders = Convert.toOrders(json);
+
+export interface Orders {
+    id?:             number;
+    company_id?:     number;
+    user_id?:        number;
+    employee_count?: number;
+    sum?:            string;
+    order_id?:       string;
+    package_id?:     number;
+    payment_type?:   string;
+    order_code?:     string;
+    total_price?:    string;
+    net_price?:      string;
+    month_count?:    number;
+    start_date?:     Date;
+    admin_count?:    number;
+    status?:         string;
+    created_at?:     Date;
+    updated_at?:     Date;
+    chat?:           number;
+    material?:       number;
+    absent?:         number;
+    vocation?:       number;
+    todo?:           number;
+    package?:        PackageProps;
+    user?:           EmployeeData;
+    company?:        Company;
 }
 
 
 // Converts JSON strings to/from your types
 export class Convert {
+
+    public static toOrders(json: string): Orders {
+        return JSON.parse(json);
+    }
+
+    public static ordersToJson(value: Orders): string {
+        return JSON.stringify(value);
+    }
     
     public static toPackageProps(json: string): PackageProps {
         return JSON.parse(json);

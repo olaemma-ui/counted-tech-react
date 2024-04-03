@@ -16,6 +16,7 @@ import { DahsboardLayout } from "./ui/dashboard/layout/dashboard_layout";
 import { TodoListPage } from "./ui/todo_list/todo_list";
 import SettingsPage from "./ui/settings/settings";
 import PakcgaePage from "./ui/package/package";
+import PaymentPage from "./ui/payment/success_payment";
 
 function App() {
 
@@ -88,6 +89,11 @@ function App() {
                 </ProptectedRoute>
               } />
             </Route>
+            <Route path={"payment"} element={
+              <ProptectedRoute>
+                <PaymentPage/>
+              </ProptectedRoute>
+            } />
 
             <Route path={"*"} element={
               <>
