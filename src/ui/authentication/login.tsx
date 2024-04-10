@@ -116,7 +116,7 @@ export const Login = ()=>{
                         {error.password}
                     </small>
 
-                    <Link to="" className="text-black mb-5 mt-3 block w-full text-right"> Passwort vergessen </Link>
+                    <Link to="/auth/forget-password" className="text-black mb-5 mt-3 block w-full text-right"> Passwort vergessen </Link>
                     <Button onPress={handleOnSubmit} isLoading={isLoading} className="bg-black block w-full text-white h-[50px]"> Anmelden </Button>
                     <div className="flex">
                         {/* <p className="text-black w-full"> Noch keinen Account?  </p> */}

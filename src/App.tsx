@@ -12,7 +12,6 @@ import { Dashboard } from "./ui/dashboard/dashboard";
 import { MaterialsPage } from "./ui/material/material";
 import { EmployeeDetails } from "./ui/employee/view_employee";
 import { Chat } from "./ui/chat/chat";
-import { DahsboardLayout } from "./ui/dashboard/layout/dashboard_layout";
 import { TodoListPage } from "./ui/todo_list/todo_list";
 import SettingsPage from "./ui/settings/settings";
 import PakcgaePage from "./ui/package/package";

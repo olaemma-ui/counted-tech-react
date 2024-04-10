@@ -15,4 +15,8 @@ export enum LocalStoragekey {
     PACKAGE_PRICE,
 
     ORDER_SUMMARY,
+
+
+    AUTH_EMAIL,
+    AUTH_OTP
 }

@@ -25,6 +25,20 @@ import { LocalStorageService } from "./local_storage";
       return config;
     },
   );
+
+  // Add a resppnse interceptor
+
+  axiosInstance.interceptors.response.use(
+    response => response,
+    error =>{
+      const status = error.response ? error.response.status : null;
+
+      if (status === 401) {
+        window.location.assign('/');
+        LocalStorageService.clear();
+      }
+    }
+  );
   
 
   function toFormData(obj: object) {

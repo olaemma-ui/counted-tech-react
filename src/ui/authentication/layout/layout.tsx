@@ -18,7 +18,7 @@ export const AuthenticationLayout = (props : AuthenticationLayoutProps)=>{
                 <img src={appLogo} className="max-h-[10em] max-w-[10em]"  />
                 {props.children}
 
-                <div className="mt-5 md:flex justify-center gap-8">
+                <div className="mt-5 flex justify-center gap-8">
                     <Link to={'/'}  className="text-black"> Datenschutzerklärung </Link>
                     <Link to={'/'} className="text-black" > Impressum </Link>
 
