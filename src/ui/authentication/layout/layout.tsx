@@ -27,5 +27,6 @@ export const AuthenticationLayout = (props : AuthenticationLayoutProps)=>{
 
             </div>
       </div>
+      
     </>);
 }
