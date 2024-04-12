@@ -17,8 +17,10 @@ export const ProptectedRoute = (props: ProtectedRouteProps)=>{
     console.log({isAuthenticated});
     
 
-    if(isAuthenticated && !(url.includes('auth') || url === "/")){
-        return props.children;
+    if(isAuthenticated){
+        if(!(url.includes('auth') || url === "/"))
+            return props.children;
+        else navigate('/dashboard');
     }else navigate('/');
 
     return (<>

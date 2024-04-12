@@ -45,12 +45,8 @@ export const SetPassword = ()=>{
                     password_confirmation: setPasswordData.password_confirmation,
                 }),
             ).then((resp) =>{
-                console.log('set-password = ',{resp});
-                
-                setShowDialog(true);
-            })
-            .catch(() => {
-                setErrorMessage('Error occurred, try again')
+                if(resp.status == 200) setShowDialog(true);
+                else setErrorMessage(resp?.message ?? '')
             })
 
             setIsLoading(false);
@@ -62,7 +58,9 @@ export const SetPassword = ()=>{
     return (<>
             <AuthenticationLayout>
                 <form className="mt-8">
-                    {errorMessage}
+                    {errorMessage &&  <div className="p-3 my-4 rounded-lg bg-red-200 text-left text-sm text-gray-800">
+                        {errorMessage}
+                    </div>}
                     <Input 
                         isReadOnly={isLoading} 
                         size={'sm'} 

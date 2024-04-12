@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from "react";
 import { Convert, EmployeeData, MessageBody, MessageRequest } from "../../interface/response/dto";
 import { axiosInstance } from "../../service/axios_conf";
 import { toFormData } from "axios";
-import { toast, Bounce, ToastContainer } from "react-toastify";
 import { DahsboardLayout } from "../dashboard/layout/dashboard_layout";
 
 
@@ -84,17 +83,6 @@ export const Chat = ()=>{
                 recipient_id: ''
             })
             setImage(null);
-            toast.success(response.data.message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-            });
             setSendMessageLoading(false)
             fetChatDetails(selectedChat.id);
         })
@@ -116,17 +104,6 @@ export const Chat = ()=>{
 
 
     return (<>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="dark"/>
 
          <DahsboardLayout>
             <div className="py-5 rounded-xl sm:h-[80vh] flex items-center justify-center bg-[#F4F4F4]">
@@ -156,7 +133,8 @@ export const Chat = ()=>{
         
                                             <div className="left">
                                                 <p className="text-black text-lg">
-                                                    {chat.surname}
+                                                    {chat.surname} 
+                                                        &nbsp; &nbsp;
                                                     {chat.name}
                                                 </p>
                                             </div>

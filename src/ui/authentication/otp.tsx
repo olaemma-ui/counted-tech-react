@@ -45,15 +45,12 @@ export const OtpVerification = ()=>{
                     email
                 }),
             ).then((response) =>{
-                console.log('otp = ', {response});
-                
-                LocalStorageService.setItem(LocalStoragekey.AUTH_OTP, OTP);
-                navigate('/auth/set-password');
-            })
-            .catch(() => {
-                setErrorMessage('Error occurred, try again')
-            })
+                if (response.status == 200) {   
+                    LocalStorageService.setItem(LocalStoragekey.AUTH_OTP, OTP);
+                    navigate('/auth/set-password');
+                }else setErrorMessage(response?.message ?? '')
 
+            })
             setIsLoading(false);
         }
     }
@@ -64,6 +61,9 @@ export const OtpVerification = ()=>{
     return (<>
             <AuthenticationLayout>
                 <form className="mt-8">
+                    {errorMessage &&  <div className="p-3 my-4 rounded-lg bg-red-200 text-left text-sm text-gray-800">
+                        {errorMessage}
+                    </div>}
                     <OTPInput 
                         value={OTP} 
                         onChange={setOTP} 

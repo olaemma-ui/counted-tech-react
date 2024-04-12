@@ -66,7 +66,6 @@ export const Login = ()=>{
                     if (loginResp.status) {
                         LocalStorageService.setItem(LocalStoragekey.IS_AUTHENTICATED, true);
                         LocalStorageService.setItem(LocalStoragekey.BEARER_TOKEN, loginResp.user?.token);
-                        LocalStorageService.setItem(LocalStoragekey.COMPANY_DATA, JSON.stringify(loginResp.user));
                         navigate('/dashboard');
                     }else setErrorMessage(loginResp.message ??  'Status [Not active]');
                 }

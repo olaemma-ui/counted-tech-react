@@ -11,7 +11,6 @@ import ImpersumDialog from "../dialogs/impersum";
 import AllgemeineuDialog from "../dialogs/allgemeine_dialog";
 import DateenschuDialog from "../dialogs/dateenschu_dialog";
 import { axiosInstance } from "../../service/axios_conf";
-import { toast, Bounce } from "react-toastify";
 import { LocalStorageService } from "../../service/local_storage";
 
 
@@ -54,17 +53,6 @@ function SettingsPage() {
         await axiosInstance.get('auth/logout')
         .then((response) => {
             if(response.data.status){
-                toast.success(response.data.message, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "dark",
-                    transition: Bounce,
-                });
                 LocalStorageService.clear();
             }
         })

@@ -19,9 +19,10 @@ import { LocalStorageService } from "./local_storage";
       console.log('url = ',config.url);
       
       // Perform actions before the request is sent
-      if(!config.url?.includes('login') || !config.url?.includes('register')){
+      if(!config.url?.includes('login') && !config.url?.includes('register')){
         config.headers.Authorization = `Bearer ${LocalStorageService.getItem(LocalStoragekey.BEARER_TOKEN)}`;
       }
+
       return config;
     },
   );
@@ -36,7 +37,7 @@ import { LocalStorageService } from "./local_storage";
       if (status === 401) {
         window.location.assign('/');
         LocalStorageService.clear();
-      }
+      }else return error;
     }
   );
   

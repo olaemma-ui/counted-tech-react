@@ -7,9 +7,6 @@ import { validateFields } from "../../urils/validation";
 import { convertDateFormat } from "../../urils/utils";
 import { toFormData } from "axios";
 import { axiosInstance } from "../../service/axios_conf";
-import { Bounce, ToastContainer, toast } from 'react-toastify';
-
-import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -165,17 +162,6 @@ export function AddLocation(props: AddLocationProps) {
             console.log('respo = ', response.data);
             
             if (response.data.status) {
-              toast.success(response.data.message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-              });
               props.onClose();
             }
           }
@@ -246,18 +232,6 @@ export function AddLocation(props: AddLocationProps) {
 
   return (
     <>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
       {/* <Button onPress={onOpen} color="primary">Open Modal</Button> */}
       <Modal 
         isOpen={isOpen} 

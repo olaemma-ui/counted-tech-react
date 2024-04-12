@@ -11,6 +11,7 @@ import { DashboardData, DashboardDataConvert, JobData, LocationData, LocationDat
 import { LocalStorageService } from "../../service/local_storage";
 import { LocalStoragekey } from "../../_constants/enums";
 import { DahsboardLayout } from "./layout/dashboard_layout";
+import { TodoListPage } from "../todo_list/todo_list";
 
 export const Dashboard = ()=> {
     const navigate = useNavigate();
@@ -18,6 +19,10 @@ export const Dashboard = ()=> {
     const [addressId, setAddressId] = useState<number>();
     const [isViewLocationOpen, setIsViewLocationOpen] = useState(false);
     const [viewEmployee, setViewEmployee] = useState(false);
+    const [viewTodo, setViewTodo] = useState({
+        isOpen: false,
+        addressId: ''
+    });
     
 
     const [dashboardData, setDashboardData] = useState<DashboardData>({});
@@ -32,8 +37,12 @@ export const Dashboard = ()=> {
     }
 
     function handleTodoPress(id: any) {
-        LocalStorageService.setItem(LocalStoragekey.ADDRESS_ID, id);
-        navigate('/dashboard/todo');
+        setViewTodo({
+            isOpen: true,
+            addressId: id,
+        });
+        // LocalStorageService.setItem(LocalStoragekey.ADDRESS_ID, id);
+        // navigate('/dashboard/todo');
     }
 
     
@@ -48,6 +57,8 @@ export const Dashboard = ()=> {
     async function fetchLocationData () {
         await axiosInstance.get('company/location')
         .then((response) => {
+            console.log({response});
+            
             const data = response.data.data;
             const list : LocationData[] = [];
 
@@ -116,6 +127,14 @@ export const Dashboard = ()=> {
                 isOpen={isViewLocationOpen}  
                 jobTitle={jobData.name ?? ''}
                 onClose={()=>{setIsViewLocationOpen(false)}} />
+
+            {viewTodo.isOpen && <TodoListPage 
+                isOpen={viewTodo.isOpen}  
+                addressId={viewTodo.addressId}
+                onClose={()=>{setViewTodo({
+                    isOpen: false,
+                    addressId: ''
+                })}} />}
         </DahsboardLayout>
     </>);
 }

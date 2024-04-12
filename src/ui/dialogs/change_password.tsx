@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure, Checkbox, Input, Link} from "@nextui-org/react";
 import { toFormData } from "axios";
-import { toast, Bounce, ToastContainer } from "react-toastify";
 import { axiosInstance } from "../../service/axios_conf";
 import { validateFields } from "../../urils/validation";
 
@@ -45,17 +44,6 @@ export default function ChangePassword(props: ChangePasswordProps) {
 
             await axiosInstance.post(`change-password`, toFormData(chnagePassword))
             .then((response) => {
-                toast.success(response.data.message, {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "dark",
-                    transition: Bounce,
-                });
             }).catch((e) => e)
 
             setIsLoading(false);
@@ -100,18 +88,7 @@ export default function ChangePassword(props: ChangePasswordProps) {
 
   return (
     <>
-    <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
+   
       <Modal 
        size={'sm'} 
        isOpen={isOpen} 

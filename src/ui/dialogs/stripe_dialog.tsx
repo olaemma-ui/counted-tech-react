@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Checkbox, Input, Link, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Divider, Spinner} from "@nextui-org/react";
 import { ArrowDownIcon, PencilIcon, TrashIcon } from "../../_components/svg_components";
-import { Bounce, ToastContainer, toast } from "react-toastify";
 import { JobData, JobDataConvert } from "../../interface/response/dashboard_data";
 import { LocalStorageService } from "../../service/local_storage";
 import { toFormData } from "axios";
@@ -45,18 +44,6 @@ export function StripeDialog(props: StripeDialogProps) {
 
   return (
     <>
-      <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="dark"
-        />
       {/* <Button onPress={onOpen} color="primary">Open Modal</Button> */}
       <Modal 
         isOpen={isOpen} 

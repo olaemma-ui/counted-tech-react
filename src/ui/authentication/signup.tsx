@@ -141,7 +141,7 @@ export const Signup = ()=>{
             setIsLoading(true);
 
             await axiosInstance.post(
-                '/auth/register', toFormData(registerData),
+                '/company-register', toFormData(registerData),
             ).then((response) =>{
                 
                 console.log(response.data);
@@ -154,6 +154,7 @@ export const Signup = ()=>{
 
                 else {
                     console.log('else = ', response.data);
+                    console.log('else = ', response);
                     
                     var resgisterResp = RegisterResponseConvert.toRegisterResponse(JSON.stringify(response.data));
                     if(resgisterResp.user) navigate('/');
@@ -197,7 +198,7 @@ export const Signup = ()=>{
                             <DropdownTrigger>
                                 
                                 <div className={`p-4 flex items-center gap-2 justify-between rounded-xl min-h-[3em] ${selectedStateValue? 'text-black': 'text-gray-500 text-sm font-normal'} shadow-md w-full text-left `}>
-                                    {selectedStateValue?.name ? selectedStateValue?.name : 'Art der Arbeit'}
+                                    {selectedStateValue?.name ? selectedStateValue?.name : 'Bundesland'}
                                     <ArrowDownIcon width="20" height="20" className="self-center justify-self-end" />
                                 </div>
                                     
@@ -224,7 +225,7 @@ export const Signup = ()=>{
                             <DropdownTrigger>
 
                                 <div className={`p-4 flex items-center gap-2 justify-between rounded-xl min-h-[3em] ${setSelectedLegalFormValue? 'text-black': 'text-gray-500 text-sm font-normal'} shadow-md w-full text-left `}>
-                                {setSelectedLegalFormValue?.name ? setSelectedLegalFormValue?.name : 'Art der Arbeit'}
+                                {setSelectedLegalFormValue?.name ? setSelectedLegalFormValue?.name : 'Rechtsform'}
                                 <ArrowDownIcon width="20" height="20" className="self-center justify-self-end" />
                                 </div>
                             </DropdownTrigger>
@@ -549,7 +550,7 @@ export const Signup = ()=>{
                         <Checkbox isSelected={isSelected} onValueChange={setIsSelected}>
                             Ich bestätige die &nbsp;
                             <Link to="" className="text-blac text-right w-full"> 
-                                Ich bestätige die AGB und Datenschutzerklärung. 
+                                AGB und Datenschutzerklärung. 
                             </Link>
                         </Checkbox>
                     </div>

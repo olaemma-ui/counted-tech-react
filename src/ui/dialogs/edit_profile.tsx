@@ -5,7 +5,6 @@ import { Employee, EmployeeData } from "../../interface/response/dto";
 import { LocationData, LocationDataConvert } from "../../interface/response/dashboard_data";
 import { axiosInstance } from "../../service/axios_conf";
 import { toFormData } from "axios";
-import { toast, Bounce, ToastContainer } from "react-toastify";
 
 
 interface EditProfileProps{
@@ -92,30 +91,6 @@ export function EditProfile(props: EditProfileProps) {
       address_id: selectedValue?.id ?? employeeData?.employee.address_id,
     }))
     .then((response) => {
-      if (response.data.status) {
-        toast.success(response.data.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-          transition: Bounce,
-        });
-      }
-      else toast.error(response?.data?.message ?? 'Error occurred', {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        transition: Bounce,
-      });
       props.onClose();
     })
 
@@ -126,18 +101,7 @@ export function EditProfile(props: EditProfileProps) {
 
   return (
     <>
-       <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
+     
       <Modal 
         isOpen={isOpen} 
         onOpenChange={onOpenChange}

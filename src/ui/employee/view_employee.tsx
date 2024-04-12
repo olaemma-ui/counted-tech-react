@@ -10,7 +10,6 @@ import { Convert, DurationObject, EmployeeData } from "../../interface/response/
 import { axiosInstance } from "../../service/axios_conf";
 import { LocalStorageService } from "../../service/local_storage";
 import { LocalStoragekey } from "../../_constants/enums";
-import { toast, Bounce, ToastContainer } from "react-toastify";
 import { dateDiff } from "../../urils/utils";
 import ConfirmDialog from "../dialogs/confirm_dialog";
 import { useNavigate } from "react-router-dom";
@@ -130,17 +129,6 @@ export const EmployeeDetails = ()=>{
         await axiosInstance.get(`company/employee-gps/${employeeDetails?.employee?.id}`)
         .then((response) => {
             setListener(`gps-lissten ${999 + Math.random() * 1111}`);
-            toast.success(response.data.message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-              });
         }).catch((e) => e)
         setUpdatingMap(false);
     }
@@ -150,17 +138,6 @@ export const EmployeeDetails = ()=>{
         await axiosInstance.get(`company/employee-minimize/${employeeDetails?.employee?.id}`)
         .then((response) => {
             setListener(`minimize-lissten ${999 + Math.random() * 1111}`);
-            toast.success(response.data.message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-                transition: Bounce,
-              });
         }).catch((e) => e)
         setUpdatingMinimize(false);
     }
@@ -168,18 +145,6 @@ export const EmployeeDetails = ()=>{
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
     return (<>
-     <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
         <DahsboardLayout>
             <div className="py-5  h-[100dvh] flex items-center justify-center">
                 <div className="sm:flex gap-8 sm:my-0 my-5 sm:p-8 p-4 m-4 w-full sm:h-[80vh] h-full overflow-auto">
