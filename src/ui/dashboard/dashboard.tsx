@@ -77,7 +77,7 @@ export const Dashboard = ()=> {
         fetchLocationData();
     }, [])
     
-
+9
     return (<>
         <DahsboardLayout>
             <div className="my-8 max-w-[80em] mx-auto">

@@ -37,7 +37,7 @@ export function AddLocation(props: AddLocationProps) {
     day: '',
     end: '',
     start: '',
-    status: false,
+    status: 0,
   }]);
   const [breakTime, setBreakTime] = useState<CreateLocationRequestBreak[]>([{
     day: '',
@@ -55,14 +55,14 @@ export function AddLocation(props: AddLocationProps) {
       day: '',
       end: '',
       start: '',
-      status: false,
+      status: 0,
     }]);
   }
   
   function handleRemoveTimeTable(index: number, val: boolean) {
     if(val === false){
       let t : CreateLocationRequestTimetable[] = timeTable;
-      t[index].status = !t[index].status;
+      t[index].status = 0;
       setTimeTable([...t]);
     }
   }
@@ -159,7 +159,7 @@ export function AddLocation(props: AddLocationProps) {
             setErrorMessage(response.data);
           }
           else {
-            console.log('respo = ', response.data);
+            console.log('respo = ', response);
             
             if (response.data.status) {
               props.onClose();

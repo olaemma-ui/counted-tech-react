@@ -1,4 +1,4 @@
-import { Button, Input, Spinner, CardHeader, Card, CardBody, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure } from "@nextui-org/react";
+import { Button, Input, Spinner, CardHeader, Card, CardBody, Modal, ModalContent, ModalHeader, ModalBody, useDisclosure, Divider } from "@nextui-org/react";
 import { CheckIcon, TrashIcon } from "../../_components/svg_components";
 
 
@@ -134,20 +134,16 @@ export const TodoListPage = (props: TodoListPageProps) => {
             onOpenChange={onOpenChange}
             placement="center"
             backdrop="blur"
-            size="2xl"
+            size="5xl"
             scrollBehavior="inside">
 
             <ModalContent>
 
-                <ModalHeader>
-
-                </ModalHeader>
-
                 <ModalBody>
 
                     <div className="py-5 flex items-center justify-center">
-                        <div className="flex flex-col sm:flex-row gap-8 sm:my-0 my-5 sm:p-8 p-4 rounded-xl bg-white m-4 w-full sm:h-[95vh] h-full overflow-auto">
-                            <div className="content flex flex-col gap-5 sm:w-[30em] w-full  sm:max-w-[18em]">
+                        <div className="flex flex-col sm:flex-row gap-8 sm:my-0 my-5 sm:p- p-4 rounded-xl bg-white m- w-full h-full overflow-auto">
+                            <div className="content flex flex-col gap-5 sm:w-[30em] w-full h-[50em] overflow-y-auto sm:max-w-[18em] border-r-2 pr-4 border-[#4269E1]">
                                 <div className="left w-full flex gap-2">
                                     <Input
                                         size="md"
@@ -170,7 +166,7 @@ export const TodoListPage = (props: TodoListPageProps) => {
                                     </Button>
                                 </div>
 
-                                {/* <Divider className=" h-[0.15em] bg-[#4269E1]"/> */}
+                                <Divider className=" h-[0.15em] bg-[#4269E1]"/>
 
                                 <div className="flex flex-col gap-4">
                                     {isLoadingAllTodo && <>
@@ -217,7 +213,7 @@ export const TodoListPage = (props: TodoListPageProps) => {
                                 </div>
                             </div>
 
-                            <div className="content w-full sm:m-0 my-5 pb-5 border-l border-[#4269E1] px-4">
+                            <div className="content w-full sm:m-0 my-5 pb-5 h-full px-4">
 
                                 {!isLoadingAllTodoImage && todoImage?.map((todoData) => {
                                     return <Card className="py-4 max-w-[40em]">
