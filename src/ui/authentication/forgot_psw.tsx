@@ -26,8 +26,10 @@ export const ForgotPassword = () => {
                 if (response.status == 200) {
                     LocalStorageService.setItem(LocalStoragekey.AUTH_EMAIL, forgetPasswordData.email);
                     navigate('/auth/otp-verification');
-                }else setErrorMessage(response?.message ?? '')
+                }
                 
+            }).catch((ex) =>{
+                setErrorMessage(ex?.message ?? '')
             })
 
             setIsLoading(false);

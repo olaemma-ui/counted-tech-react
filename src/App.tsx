@@ -70,11 +70,11 @@ function App() {
                 </ProptectedRoute>
               } />
 
-              <Route path={"todo"} element={
+              {/* <Route path={"todo"} element={
                 <ProptectedRoute>
                   <TodoListPage/>
                 </ProptectedRoute>
-              } />
+              } /> */}
 
               <Route path={"settings"} element={
                 <ProptectedRoute>

@@ -37,7 +37,7 @@ import { LocalStorageService } from "./local_storage";
       if (status === 401) {
         window.location.assign('/');
         LocalStorageService.clear();
-      }else return error;
+      }
     }
   );
   

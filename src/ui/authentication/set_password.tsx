@@ -46,7 +46,8 @@ export const SetPassword = ()=>{
                 }),
             ).then((resp) =>{
                 if(resp.status == 200) setShowDialog(true);
-                else setErrorMessage(resp?.message ?? '')
+            }).catch((ex) =>{
+                setErrorMessage(ex?.message ?? '')
             })
 
             setIsLoading(false);

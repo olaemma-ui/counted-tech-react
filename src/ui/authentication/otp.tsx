@@ -48,8 +48,10 @@ export const OtpVerification = ()=>{
                 if (response.status == 200) {   
                     LocalStorageService.setItem(LocalStoragekey.AUTH_OTP, OTP);
                     navigate('/auth/set-password');
-                }else setErrorMessage(response?.message ?? '')
+                }
 
+            }).catch((ex) =>{
+                setErrorMessage(ex?.message ?? '')
             })
             setIsLoading(false);
         }
